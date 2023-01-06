@@ -24,6 +24,15 @@ interface ProductoMasterDao {
     @Query("SELECT * from ProductoMaster WHERE sku = :sku")
      fun getsku(sku:String): ProductoMaster
 
+    @Query("SELECT * from ProductoMaster WHERE sku = :sku AND cod_categoria = :cod_categoria")
+    fun getsku_categoria(sku:String,cod_categoria:String): ProductoMaster
+
+    @Query("SELECT * from ProductoMaster WHERE descripcion LIKE '%' || :nombre || '%'")
+    fun get_x_nombre(nombre:String): List<ProductoMaster>
+
+    @Query("SELECT * from ProductoMaster WHERE descripcion LIKE '%' || :nombre || '%'  AND cod_categoria = :cod_categoria")
+    fun get_x_nombre_categoria(nombre:String,cod_categoria:String): List<ProductoMaster>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
      fun insert(producto: ProductoMaster)
 

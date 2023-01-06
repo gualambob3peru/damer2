@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.damer2.data.Database.AuditoriaDb
 import com.example.damer2.data.Entities.*
+import com.example.damer2.global.GlobalVar.Companion.RUTA_API
 import com.example.damer2.services.LoginInput
 import com.example.damer2.services.LoginResponse
 import com.example.damer2.services.LoginService
@@ -35,11 +36,22 @@ class MainActivity : AppCompatActivity() {
         val tmensaje = findViewById<TextView>(R.id.tmensaje)
         val resumenActivity = Intent(baseContext, ResumenActivity::class.java)
 
+
+        lifecycleScope.launch(Dispatchers.IO){
+            var miGlobal = db.GlobalDao().get_codigo("ruta_api")
+            if(miGlobal==null){
+                prefs.setRutaApi(RUTA_API)
+            }
+        }
+
+
+
         botonLogin.setOnClickListener {
 
             if(txtEmail.text.toString().equals("") || txtPassword.text.toString().equals("") ){
                 tmensaje.text = "Debe rellenar todos los campos"
             }else{
+                tmensaje.text = "Descargando datos..."
                 botonLogin.isEnabled= false
                 val loginInput = LoginInput(txtEmail.text.toString(), txtPassword.text.toString())
                 var service = LoginService.create()
@@ -58,6 +70,7 @@ class MainActivity : AppCompatActivity() {
                                 lifecycleScope.launch(Dispatchers.IO){
                                     var Produ = db.ProductoMasterDao().getCount()
                                     if(Produ==0){
+
                                         var serviceTodo = TodoService.create()
                                         var apiInterfaceTodo = serviceTodo.get()
 
@@ -70,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                                                 lifecycleScope.launch(Dispatchers.IO){
                                                     var todo = response.body()
 
-
+                                                    tmensaje.text = "Cargando datos..."
                                                     if (todo != null) {
                                                         var categorias = todo.body.categorias
                                                         if(categorias!=null){
@@ -116,7 +129,9 @@ class MainActivity : AppCompatActivity() {
                                                                     ProductoMaster(
                                                                         0,
                                                                         producto.sku,
-                                                                        producto.descripcion
+                                                                        producto.descripcion,
+                                                                        "1",
+                                                                        producto.cod_categoria
                                                                     )
                                                                 )
                                                             }
@@ -185,7 +200,7 @@ class MainActivity : AppCompatActivity() {
 
                                             override fun onFailure(call: Call<TodoResponse>, t: Throwable) {
 
-
+                                                tmensaje.text = "Hubo un error de conexión"
                                                 botonLogin.isEnabled= true
                                                 //TODO(t.toString() + "fff")
                                             }

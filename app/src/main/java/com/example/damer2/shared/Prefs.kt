@@ -13,8 +13,14 @@ class Prefs(val context:Context) {
 
     val storage = context.getSharedPreferences(SHARED_NAME,0)
 
+
+
+
     fun setFechaVisita(fecha_visita : String){
         storage.edit().putString("fecha_visita",fecha_visita).apply()
+    }
+    fun setRutaApi(ruta:String){
+        storage.edit().putString("ruta_api",ruta).apply()
     }
 
     fun setUsuario (usuario : MutableMap<String,String>){
@@ -28,6 +34,7 @@ class Prefs(val context:Context) {
         storage.edit().putString("anio",usuario["anio"]).apply()
         storage.edit().putString("mes",usuario["mes"]).apply()
         storage.edit().putString("contrasena",usuario["contrasena"]).apply()
+
     }
 
     fun getUsuario(): MutableMap<String,String> {
@@ -53,6 +60,10 @@ class Prefs(val context:Context) {
 
     fun getFechaVisita ():String{
         return storage.getString("fecha_visita","")!!
+    }
+
+    fun getRutaApi(): String {
+        return storage.getString("ruta_api","")!!
     }
 }
 

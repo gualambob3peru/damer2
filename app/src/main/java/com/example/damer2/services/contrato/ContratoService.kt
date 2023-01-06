@@ -1,4 +1,4 @@
-package com.example.damer2.services.medicion
+package com.example.damer2.services.contrato
 
 import com.example.damer2.shared.UsuarioApplication
 import retrofit2.Call
@@ -8,23 +8,23 @@ import retrofit2.http.Body
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface MedicionService {
+interface ContratoService {
     @Headers("Content-Type: application/json")
-    @POST("medicion")
-    fun medicion(@Body MedicionInput: CategoriaInput): Call<CategoriaResponse>
+    @POST("getContratosConsolidado")
+    fun getContratosConsolidado(@Body email: ContratoInput): Call<ContratoResponse>
 
 
     companion object {
 
-        var BASE_URL = UsuarioApplication.prefs.getRutaApi() + "api/medicion/"
-
-        fun create() : CategoriaService {
+        //var BASE_URL = "http://192.168.3.5/auditoria/public_auditoria/auditoria/api/login/"
+        var BASE_URL = UsuarioApplication.prefs.getRutaApi() + "api/contrato/"
+        fun create() : ContratoService {
 
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(BASE_URL)
                 .build()
-            return retrofit.create(CategoriaService::class.java)
+            return retrofit.create(ContratoService::class.java)
 
         }
     }

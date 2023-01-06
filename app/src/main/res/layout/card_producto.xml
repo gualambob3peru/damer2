@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ruta_card_view"
+    android:layout_margin="1dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp"
+    app:contentPadding="4dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:padding="1dp">
+
+        <TextView
+            android:id="@+id/tCodigoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="315dp"
+            android:layout_marginTop="6dp"
+            android:text="2020-05-25"
+            android:textColor="@color/black"
+            android:textSize="11dp">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/producto_msgRegla1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="62dp"
+            android:text=""
+            android:textColor="@color/rojo_1"
+            android:textSize="8dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tDescripcionProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="72dp"
+            android:text="Hola Hola"
+            android:textColor="@color/black"
+            android:textSize="11dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/inputCompra"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FF0000" />
+
+        <EditText
+            android:id="@+id/inputInventario"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FF0000" />
+
+        <EditText
+            android:id="@+id/inputPrecio"
+            android:layout_width="57dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FF0000" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="40dp"
+            android:text="Compra"
+
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:layout_marginTop="40dp"
+            android:text="Inventario"
+
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="145dp"
+            android:layout_marginTop="40dp"
+
+            android:text="Precio"
+            android:textSize="10dp" />
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="215dp"
+            android:layout_marginTop="40dp"
+
+            android:text="VE"
+            android:textSize="10dp" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="285dp"
+            android:layout_marginTop="6dp"
+            android:text="SKU : "
+            android:textSize="11dp" />
+
+        <EditText
+            android:id="@+id/inputVe"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="205dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FF0000" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="285dp"
+            android:layout_marginTop="23dp"
+            android:text="I Ant: "
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="285dp"
+            android:layout_marginTop="41dp"
+            android:text="C Ant: "
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/txtVant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="324dp"
+            android:layout_marginTop="23dp"
+            android:text="V ant: "
+            android:textColor="#000"
+            android:textSize="11dp" />
+
+        <TextView
+            android:id="@+id/txtcoant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="324dp"
+            android:layout_marginTop="41dp"
+            android:text="Co ant: "
+            android:textColor="#000"
+            android:textSize="11dp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -36,7 +36,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="4dp"
             android:backgroundTint="@color/rojo_1"
-            android:text="DESCARGAR"
+            android:text="Ver"
             android:textSize="9dp" />
 
 

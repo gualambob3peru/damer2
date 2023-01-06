@@ -49,6 +49,7 @@ class NegocioDownloadAdapter:RecyclerView.Adapter<NegocioDownloadAdapter.ViewHol
 
             itemButton.setOnClickListener{
                 onItemClick?.invoke(negocios[adapterPosition])
+
             }
         }
     }

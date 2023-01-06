@@ -16,7 +16,9 @@ import com.example.damer2.data.Entities.*
     Canal::class,
     Zona::class,
     Distrito::class,
-    DistritoUsuario::class
+    DistritoUsuario::class,
+    Contrato::class,
+    Global::class
                      ],
     version = 1,exportSchema=false)
 abstract class AuditoriaDb : RoomDatabase()  {
@@ -30,6 +32,8 @@ abstract class AuditoriaDb : RoomDatabase()  {
     abstract fun ZonaDao(): ZonaDao
     abstract fun DistritoDao(): DistritoDao
     abstract fun DistritoUsuarioDao(): DistritoUsuarioDao
+    abstract fun ContratoDao(): ContratoDao
+    abstract fun GlobalDao(): GlobalDao
 
 
     companion object {

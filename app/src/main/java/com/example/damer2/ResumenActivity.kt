@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,14 +24,17 @@ class ResumenActivity : AppCompatActivity() {
 
         val db = AuditoriaDb(this)
         var medicion = intent.getStringExtra("medicion")
-        val negocio_descarga = Intent(baseContext, NegocioDescargaActivity::class.java)
+        val negocio_descarga = Intent(baseContext, DistritoDescargaActivity::class.java)
+        val negocioActivity = Intent(baseContext, NegocioActivity::class.java)
 
         var resumen_btnDescargar = findViewById<Button>(R.id.resumen_btnDescargar)
+        var resumen_tMensajeDistrito = findViewById<TextView>(R.id.resumen_tMensajeDistrito)
 
         lifecycleScope.launch(Dispatchers.IO){
             var distritos = db.DistritoUsuarioDao().getAll()
 
-            if(distritos !=null){
+            if(distritos.size!=0){
+
                 var arr_codigo : MutableList<String> = mutableListOf()
                 var arr_descripcion : MutableList<String> = mutableListOf()
                 var arr_distrito : MutableList<DistritoUsuario> = mutableListOf()
@@ -45,18 +49,28 @@ class ResumenActivity : AppCompatActivity() {
                 var adapter = DistritoUsuarioAdapter()
                 adapter.setList(arr_codigo,arr_descripcion,arr_distrito)
 
-                adapter.onItemClick = { pro ->
-                    /*negocio_categoria_activity.putExtra("cod_negocio",codigo_negocio.text)
-                    negocio_categoria_activity.putExtra("descripcion_negocio",descripcion_negocio.text)
-                    startActivity(negocio_categoria_activity)*/
+                adapter.onItemClick = { distrito ->
+
+                    runOnUiThread {
+                        negocioActivity.putExtra("cod_distrito",distrito.codigo)
+                        negocioActivity.putExtra("di_descripcion",distrito.descripcion)
+                        startActivity(negocioActivity)
+                    }
+
+                }
+                runOnUiThread {
+                    val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(applicationContext)
+                    var recyclerView = findViewById<RecyclerView>(R.id.recycleViewDistritoUsuario)
+                    recyclerView.layoutManager = linearLayoutManager
+                    recyclerView.adapter = adapter
                 }
 
-                val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(applicationContext)
-                var recyclerView = findViewById<RecyclerView>(R.id.recycleViewDistritoUsuario)
-                recyclerView.layoutManager = linearLayoutManager
-                recyclerView.adapter = adapter
             }else{
-                //No hay distritos
+                runOnUiThread {
+                    resumen_tMensajeDistrito.text = "No hay distritos descargados..."
+                }
+
+
             }
 
 

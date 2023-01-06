@@ -19,9 +19,12 @@ interface ProductoDao {
 
     @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio  AND sku!=''")
      fun getAllProductos_negocio(cod_negocio:String ): List<Producto>
-
+     
     @Query("SELECT * from Producto WHERE id = :id")
      fun get(id: Int): Producto
+
+    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria=:cod_categoria AND sku = :sku")
+    fun get_x_categoria_sku(cod_negocio:String,cod_categoria: String,sku: String): Int
 
     @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria  AND sku!=''")
      fun getAllProductos_categoria(cod_negocio:String , cod_categoria:String ): List<Producto>

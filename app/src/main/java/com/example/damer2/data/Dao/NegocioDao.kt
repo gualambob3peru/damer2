@@ -18,6 +18,9 @@ interface NegocioDao {
     @Query("SELECT * from Negocio WHERE id = :id")
      fun get(id: Int): Negocio
 
+    @Query("SELECT * from Negocio WHERE distrito = :cod_distrito order by descripcion asc")
+    fun get_distrito(cod_distrito: String): List<Negocio>
+
     @Query("SELECT * from Negocio WHERE estadoVi = 2")
      fun get_ocultos(): List<Negocio>
 

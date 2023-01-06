@@ -1,5 +1,6 @@
 package com.example.damer2.services.negocio
 
+import com.example.damer2.shared.UsuarioApplication
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,7 +28,7 @@ interface NegocioService {
     companion object {
 
         //var BASE_URL = "http://192.168.3.5/auditoria/public_auditoria/auditoria/api/negocio/"
-        var BASE_URL = "http://damer2.b3peru.com/api/negocio/"
+        var BASE_URL = UsuarioApplication.prefs.getRutaApi() + "api/negocio/"
         fun create() : NegocioService {
 
             val retrofit = Retrofit.Builder()

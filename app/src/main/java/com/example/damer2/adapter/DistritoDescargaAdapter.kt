@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.damer2.R
 import com.example.damer2.data.Entities.Distrito
-import com.example.damer2.data.Entities.Negocio
 
-class DistritoAdapter:RecyclerView.Adapter<DistritoAdapter.ViewHolder>() {
+class DistritoDescargaAdapter:RecyclerView.Adapter<DistritoDescargaAdapter.ViewHolder>() {
     var codigos : MutableList<String> = mutableListOf()
     var descripcions : MutableList<String> = mutableListOf()
     var buttons : MutableList<String> = mutableListOf()
@@ -44,12 +43,13 @@ class DistritoAdapter:RecyclerView.Adapter<DistritoAdapter.ViewHolder>() {
 
 
         init{
-            itemDescripcion = itemView.findViewById(R.id.card_distrito_tDescripcion)
+            itemDescripcion = itemView.findViewById(R.id.card_distrito_usuario_tDescripcion)
             itemDistrito = Distrito(0)
-            itemButton = itemView.findViewById(R.id.card_distrito_btnDescargar)
+            itemButton = itemView.findViewById(R.id.card_distrito_usuario_btnVer)
 
             itemButton.setOnClickListener{
                 onItemClick?.invoke(distritos[adapterPosition])
+                itemButton.text="Descargando..."
             }
         }
     }

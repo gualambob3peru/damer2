@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:background="@color/azul_1"
-    tools:context=".NegocioDescargaActivity">
+    tools:context=".DistritoDescargaActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,8 +62,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/distrito_lista"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="598dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 
