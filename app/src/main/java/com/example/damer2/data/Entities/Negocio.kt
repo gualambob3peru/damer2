@@ -18,5 +18,6 @@ data class Negocio (
     var estado: String = "",
     var estadoVi : String = "1",
     var stateDownload: String = "0",
-    var di_descripcion: String = ""
+    var di_descripcion: String = "",
+    var estadoEnviado : Int = 0
 )

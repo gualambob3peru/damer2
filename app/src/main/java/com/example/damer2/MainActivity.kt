@@ -3,6 +3,7 @@ package com.example.damer2
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val db = AuditoriaDb(this)
 
-        val botonLogin = findViewById<Button>(R.id.btnLogin)
+        val botonLogin = findViewById<ImageView>(R.id.btnLogin)
         val txtEmail = findViewById<TextView>(R.id.txtEmail)
         val txtPassword = findViewById<TextView>(R.id.txtPassword)
         val tmensaje = findViewById<TextView>(R.id.tmensaje)
@@ -49,9 +50,15 @@ class MainActivity : AppCompatActivity() {
         botonLogin.setOnClickListener {
 
             if(txtEmail.text.toString().equals("") || txtPassword.text.toString().equals("") ){
-                tmensaje.text = "Debe rellenar todos los campos"
+                runOnUiThread {
+
+                    tmensaje.text = "Debe rellenar todos los campos"
+                }
             }else{
-                tmensaje.text = "Descargando datos..."
+                runOnUiThread {
+
+                    tmensaje.text = "Descargando datos..."
+                }
                 botonLogin.isEnabled= false
                 val loginInput = LoginInput(txtEmail.text.toString(), txtPassword.text.toString())
                 var service = LoginService.create()
@@ -83,13 +90,16 @@ class MainActivity : AppCompatActivity() {
                                                 lifecycleScope.launch(Dispatchers.IO){
                                                     var todo = response.body()
 
-                                                    tmensaje.text = "Cargando datos..."
+                                                    runOnUiThread {
+
+                                                        tmensaje.text = "Cargando datos..."
+                                                    }
                                                     if (todo != null) {
                                                         var categorias = todo.body.categorias
                                                         if(categorias!=null){
                                                             db.CategoriaDao().borrarTodo()
                                                             for(categoria in categorias){
-                                                                db.CategoriaDao().insert(Categoria(0,categoria.codigo,categoria.descripcion))
+                                                                db.CategoriaDao().insert(Categoria(0,categoria.codigo,categoria.descripcion,"1",categoria.tipoDato))
 
                                                             }
                                                         }
@@ -199,8 +209,10 @@ class MainActivity : AppCompatActivity() {
                                             }
 
                                             override fun onFailure(call: Call<TodoResponse>, t: Throwable) {
+                                                runOnUiThread {
 
-                                                tmensaje.text = "Hubo un error de conexión"
+                                                    tmensaje.text = "Hubo un error de conexión"
+                                                }
                                                 botonLogin.isEnabled= true
                                                 //TODO(t.toString() + "fff")
                                             }
@@ -244,10 +256,16 @@ class MainActivity : AppCompatActivity() {
                                     }
 
                                 }else{
-                                    tmensaje.text = "Usuario o contraseña incorrecta"
+                                    runOnUiThread {
+
+                                        tmensaje.text = "Usuario o contraseña incorrecta"
+                                    }
                                 }
                             }else{
-                                tmensaje.text = "Usuario o contraseña incorrecta"
+                                runOnUiThread {
+
+                                    tmensaje.text = "Usuario o contraseña incorrecta"
+                                }
                             }
 
                             botonLogin.isEnabled= true

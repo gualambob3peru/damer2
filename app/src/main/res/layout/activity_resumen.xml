@@ -172,11 +172,11 @@
             android:id="@+id/resumen_btnDescargar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:background="@drawable/boton"
             android:padding="10dp"
-            android:text="DESCARGAR"
+            android:text="DESCARGAR NEGOCIOS POR DISTRITO"
             android:textColor="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

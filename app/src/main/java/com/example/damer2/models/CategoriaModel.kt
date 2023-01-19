@@ -7,4 +7,5 @@ class CategoriaModel {
     var codigo: String = ""
     var descripcion: String = ""
     var productos : List<ProductoModel> = listOf()
+    var tipoDato : String = ""
 }

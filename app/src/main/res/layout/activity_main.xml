@@ -38,40 +38,43 @@
         app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/tmensaje"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginTop="4dp"
         android:textColor="#FFF"
-        android:layout_marginTop="63dp"
-        android:text="DAMER"
-        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
-    <Button
+    <ImageView
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="#ec3a27"
-        android:text="Ingresar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/tmensaje"
+        app:srcCompat="@drawable/btnentrar" />
 
-    <TextView
-        android:id="@+id/tmensaje"
-        android:layout_width="271dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="23dp"
-        android:layout_marginTop="16dp"
-        android:textColor="#FFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.401"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="104dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/logodamer1" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="150dp"
+        android:layout_height="37dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/logodamer2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

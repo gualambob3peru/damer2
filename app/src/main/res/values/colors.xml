@@ -3,6 +3,10 @@
     <color name="azul_1">#3351a6</color>
     <color name="azul_2">#a0aed2</color>
     <color name="rojo_1">#ec3a27</color>
+    <color name="rojo_2">#ff6542</color>
+    <color name="amarillo_1">#ffd166</color>
+    <color name="verde_1">#06D6A0</color>
+
     <color name="plomo_1">#ebeef1</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

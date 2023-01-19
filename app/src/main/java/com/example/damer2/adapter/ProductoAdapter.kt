@@ -2,20 +2,18 @@ package com.example.damer2.adapter
 
 import android.graphics.Color
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.damer2.ProductoActivity
 import com.example.damer2.R
-import com.example.damer2.data.Entities.Categoria
 import com.example.damer2.data.Entities.Contrato
 import com.example.damer2.data.Entities.Producto
-import org.w3c.dom.Text
 
 class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
     var codigos : MutableList<String> = mutableListOf()
@@ -23,18 +21,20 @@ class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
     var descripcions : MutableList<String> = mutableListOf()
     var buttons : MutableList<String> = mutableListOf()
     var onCompraKey: ((Int, Int, EditText, EditText,Float, TextView) -> Unit)? = null
-    var onInventarioKey: ((Int, Int, EditText) -> Unit)? = null
+    var onInventarioKey: ((Int, Int, EditText, EditText,Float, TextView) -> Unit)? = null
     var onPrecioKey: ((Int, Int, EditText) -> Unit)? = null
     var onVeKey: ((Int, Int, EditText) -> Unit)? = null
     var onItemClick: ((Int,TextView,TextView,TextView,TextView) -> Unit)? = null
     var productos : List<Producto> = emptyList()
     var listText : List<TextView> = mutableListOf()
+    var tipoDato:String="0"
 
-    fun setList(miList1: MutableList<String>,miList2: MutableList<String>,miList4:List<Producto>,miList5:Contrato){
+    fun setList(miList1: MutableList<String>,miList2: MutableList<String>,miList4:List<Producto>,miList5:Contrato,tipoDato : String){
         this.codigos = miList1
         this.descripcions = miList2
         this.productos = miList4
         this.miContrato = miList5
+        this.tipoDato = tipoDato
     }
 
     fun getList(viewHolder: ViewHolder):TextView{
@@ -92,6 +92,20 @@ class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
 
             if(miContrato.cod_categoria!=""){
                 //Iniciando
+                if(tipoDato=="1"){
+                    itemInventario.setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
+                    itemCompra.setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
+                    itemVe.setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
+                }else{
+                    itemCompra.setInputType(InputType.TYPE_CLASS_NUMBER)
+                    itemInventario.setInputType(InputType.TYPE_CLASS_NUMBER)
+                    itemVe.setInputType(InputType.TYPE_CLASS_NUMBER)
+                }
+
+
+                itemPrecio.setInputType(InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED)
+
+
                 itemCompra.isEnabled = false
                 itemCompra.setBackgroundColor(Color.parseColor("#EEEEEE"))
                 itemInventario.isEnabled = false
@@ -154,7 +168,11 @@ class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
 
             itemInventario.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(s: Editable) {
-                    onInventarioKey?.invoke(adapterPosition,1,itemInventario)
+
+                    val inputCompraV = itemView.findViewById<EditText>(R.id.inputCompra)
+                    val inputInventarioV = itemView.findViewById<EditText>(R.id.inputInventario)
+
+                    onInventarioKey?.invoke(adapterPosition,0,inputCompraV,inputInventarioV,productos[adapterPosition].vant.toFloat(),itemMsg)
                 }
                 override fun beforeTextChanged(s: CharSequence, start: Int,
                                                count: Int, after: Int) {}

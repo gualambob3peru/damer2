@@ -9,5 +9,7 @@ data class Categoria (
     var id: Int = 0,
     var codigo: String = "",
     var descripcion: String = "",
-    var estado: String = ""
+    var estado: String = "",
+    var tipoDato : String = ""
+
 )

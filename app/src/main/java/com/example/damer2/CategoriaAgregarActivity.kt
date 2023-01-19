@@ -20,14 +20,17 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_categoria_agregar)
         val db = AuditoriaDb(this)
 
         var codigo_negocio = intent.getStringExtra("cod_negocio")
+        var cod_distrito = intent.getStringExtra("cod_distrito")
+        var di_descripcion = intent.getStringExtra("di_descripcion")
         var direccion = intent.getStringExtra("direccion")
-        val btnGuardarCategoria = findViewById<Button>(R.id.categoria_agregar_btnGuardar)
+        val btnGuardarCategoria = findViewById<ImageView>(R.id.categoria_agregar_btnGuardar)
         val categoriaActivity = Intent(this, CategoriaActivity::class.java)
-        //val btnAtras = findViewById<ImageView>(R.id.btnAtras)
+        var btnAtras = findViewById<ImageView>(R.id.btnAtras)
 
         spinner = findViewById<Spinner>(R.id.cboCategoria)
         spinner!!.onItemSelectedListener = this
@@ -63,16 +66,23 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
 
                 categoriaActivity.putExtra("cod_negocio",codigo_negocio.toString())
                 categoriaActivity.putExtra("direccion",direccion)
+                categoriaActivity.putExtra("cod_distrito", cod_distrito)
+                categoriaActivity.putExtra("di_descripcion", di_descripcion)
                 startActivity(categoriaActivity)
 
             }
         }
 
-      /*  btnAtras.setOnClickListener {
-            negocio_categoria_activity.putExtra("cod_negocio",codigo_negocio.toString())
-            negocio_categoria_activity.putExtra("descripcion_negocio","")
-            startActivity(negocio_categoria_activity)
-        }*/
+        btnAtras.setOnClickListener {
+            finish()
+            /*runOnUiThread {
+                categoriaActivity.putExtra("cod_negocio", codigo_negocio)
+                categoriaActivity.putExtra("direccion", direccion)
+                categoriaActivity.putExtra("cod_distrito", cod_distrito)
+                categoriaActivity.putExtra("di_descripcion", di_descripcion)
+                startActivity(categoriaActivity)
+            }*/
+        }
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {

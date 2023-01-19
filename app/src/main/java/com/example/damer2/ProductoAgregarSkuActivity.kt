@@ -169,7 +169,8 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
         }
 
         btnAtras.setOnClickListener{
-            runOnUiThread {
+            finish()
+            /*runOnUiThread {
                 productoActivity.putExtra("cod_negocio", cod_negocio)
                 productoActivity.putExtra("direccion", direccion)
                 productoActivity.putExtra("cod_categoria", cod_categoria)
@@ -177,7 +178,7 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
                 productoActivity.putExtra("cod_canal", cod_canal)
                 productoActivity.putExtra("ca_descripcion", ca_descripcion)
                 startActivity(productoActivity)
-            }
+            }*/
         }
     }
 }

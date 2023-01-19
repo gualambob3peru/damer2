@@ -11,4 +11,5 @@ class NegocioModel {
     var cod_canal : String = "0"
     var cod_zona : String = "0"
     var di_descripcion: String = ""
+    var estadoEnviado : Int = 0
 }

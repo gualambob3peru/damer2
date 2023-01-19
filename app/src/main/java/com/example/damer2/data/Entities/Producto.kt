@@ -22,6 +22,10 @@ data class Producto (
     var cod_zona : String = "0",
     var cod_canal : String = "0",
     var estadoNuevo : String = "0",
-    var compra_ant : String = "0"
+    var compra_ant : String = "0",
+    var fabricante : String = "",
+    var marca : String = "",
+    var peso : String = "",
+    var imagen : String = "",
 
 )

@@ -15,6 +15,9 @@ interface CategoriaDao {
     @Query("SELECT * from Categoria WHERE id = :id")
      fun get(id: Int): Categoria
 
+    @Query("SELECT * from Categoria WHERE codigo = :codigo")
+    fun get_by_codigo(codigo: String): Categoria
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
      fun insert(categoria: Categoria)
 

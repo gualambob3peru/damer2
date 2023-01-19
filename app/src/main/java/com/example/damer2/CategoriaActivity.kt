@@ -73,6 +73,8 @@ class CategoriaActivity : AppCompatActivity() {
                 adapter.onItemClick = { categoria ->
                     runOnUiThread {
                         productoActivity.putExtra("cod_negocio", cod_negocio)
+                        productoActivity.putExtra("cod_distrito", cod_distrito)
+                        productoActivity.putExtra("di_descripcion", di_descripcion)
                         productoActivity.putExtra("direccion", direccion)
                         productoActivity.putExtra("cod_categoria", categoria.codigo)
                         productoActivity.putExtra("cod_zona", cod_zona)
@@ -99,7 +101,8 @@ class CategoriaActivity : AppCompatActivity() {
 
         categoria_btnAgregar.setOnClickListener {
             runOnUiThread{
-
+                categoriaAgregarActivity.putExtra("cod_distrito", cod_distrito)
+                categoriaAgregarActivity.putExtra("di_descripcion", di_descripcion)
                 categoriaAgregarActivity.putExtra("cod_negocio", cod_negocio)
                 categoriaAgregarActivity.putExtra("direccion", direccion)
                 startActivity(categoriaAgregarActivity)
@@ -107,11 +110,12 @@ class CategoriaActivity : AppCompatActivity() {
         }
 
         btnAtras.setOnClickListener{
-            runOnUiThread {
+            finish()
+          /*  runOnUiThread {
                 negocioActivity.putExtra("cod_distrito", cod_distrito)
                 negocioActivity.putExtra("di_descripcion", di_descripcion)
                 startActivity(negocioActivity)
-            }
+            }*/
 
         }
 

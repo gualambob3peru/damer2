@@ -14,23 +14,35 @@ interface ProductoDao {
     @Query("SELECT * from Producto")
      fun getAll(): List<Producto>
 
-    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria AND sku!=''")
+    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria AND sku!='' ORDER BY descripcion")
      fun getAllProductosNego(cod_negocio:String , cod_categoria:String ): List<Producto>
 
-    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio  AND sku!=''")
+    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio  AND sku!=''  ORDER BY descripcion")
      fun getAllProductos_negocio(cod_negocio:String ): List<Producto>
      
     @Query("SELECT * from Producto WHERE id = :id")
      fun get(id: Int): Producto
 
+    @Query("SELECT * from Producto WHERE sku = :sku")
+    fun get_by_codigo(sku: String): Producto
+
     @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria=:cod_categoria AND sku = :sku")
     fun get_x_categoria_sku(cod_negocio:String,cod_categoria: String,sku: String): Int
 
-    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria  AND sku!=''")
+    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria  AND sku!=''  ORDER BY descripcion ASC")
      fun getAllProductos_categoria(cod_negocio:String , cod_categoria:String ): List<Producto>
 
-    @Query("SELECT id,cod_categoria as codigo,desc_categoria as descripcion,1 estado from Producto WHERE cod_negocio = :cod_negocio GROUP BY cod_categoria,desc_categoria")
+    @Query("SELECT * from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria  AND sku LIKE '%' || :sku || '%' ")
+    fun getAllProductos_categoria_sku(cod_negocio:String , cod_categoria:String ,sku:String): List<Producto>
+
+    @Query("SELECT id,cod_categoria as codigo,desc_categoria as descripcion,1 estado, 0 tipoDato from Producto WHERE cod_negocio = :cod_negocio GROUP BY cod_categoria,desc_categoria")
      fun getCategorias_negocio(cod_negocio:String ): List<Categoria>
+
+    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND (inventario = '' OR compra='' OR precio ='' OR vant='')")
+    fun getNumCampoVacio_by_negocio(cod_negocio: String): Int
+
+
+
 
     @Query("UPDATE Producto SET compra=:compra , inventario=:inventario,precio=:precio, ve=:ve WHERE cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria")
      fun update(cod_negocio:String , cod_categoria:String ,compra:String,inventario:String,precio:String,ve:String)

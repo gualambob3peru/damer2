@@ -55,40 +55,52 @@
             android:id="@+id/categoria_txtNegocio"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="4dp"
             android:layout_marginBottom="15dp"
             android:text="PRODUCTOS"
             android:textColor="#FFF"
             android:textSize="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.333" />
 
         <ImageView
             android:id="@+id/producto_btnGuardar"
             android:layout_width="51dp"
             android:layout_height="38dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/guardar" />
+
+        <ImageView
+            android:id="@+id/producto_btnCeros"
+            android:layout_width="51dp"
+            android:layout_height="38dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/cero" />
+
         <ImageView
             android:id="@+id/producto_agregarProducto"
             android:layout_width="51dp"
             android:layout_height="38dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="66dp"
+            android:layout_marginEnd="108dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/agregar" />
+
         <ImageView
             android:id="@+id/producto_agregarProductoSku"
             android:layout_width="51dp"
             android:layout_height="38dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="116dp"
+            android:layout_marginEnd="160dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/agregarsku" />
@@ -99,6 +111,38 @@
         android:id="@+id/recyclerViewProducto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="120px"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/producto_buscador" />
+
+    <EditText
+        android:id="@+id/producto_buscador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+    <Button
+        android:id="@+id/producto_btnBuscar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:backgroundTint="@color/azul_1"
+        android:text="Buscar"
+        app:layout_constraintEnd_toStartOf="@+id/producto_btnCancelar"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
+
+    <Button
+        android:id="@+id/producto_btnCancelar"
+        android:layout_width="54dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="X"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />
 </androidx.constraintlayout.widget.ConstraintLayout>

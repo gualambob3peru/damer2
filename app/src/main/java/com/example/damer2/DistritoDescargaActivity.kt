@@ -3,6 +3,7 @@ package com.example.damer2
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +39,7 @@ class DistritoDescargaActivity : AppCompatActivity() {
         var service = DistritoService.create()
         var apiInterface = service.get_x_auditor(distritoEmailInput)
         val resumenActivity = Intent(baseContext, ResumenActivity::class.java)
+        var btnAtras = findViewById<ImageView>(R.id.btnAtras)
 
         apiInterface.enqueue( object : Callback<DistritoResponse>
         {
@@ -211,6 +213,12 @@ class DistritoDescargaActivity : AppCompatActivity() {
 
             }
         })
+
+        btnAtras.setOnClickListener{
+            runOnUiThread {
+                finish()
+            }
+        }
 
     }
 }

@@ -12,4 +12,8 @@ class ProductoModel {
     var cod_canal : String =""
     var cod_zona : String = ""
     var compra_ant : String =""
+    var fabricante : String = ""
+    var marca : String = ""
+    var peso : String = ""
+    var imagen : String = ""
 }
