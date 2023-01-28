@@ -24,6 +24,12 @@ interface NegocioDao {
     @Query("SELECT * from Negocio WHERE estadoVi = 2")
      fun get_ocultos(): List<Negocio>
 
+    @Query("SELECT * from Negocio WHERE canal = :cod_canal and distrito=:cod_distrito and estadoEnviado=0")
+    fun getNegociosIncluir(cod_canal: String,cod_distrito: String): List<Negocio>
+
+
+
+
     @Query("SELECT estadoEnviado from Negocio WHERE codigo_negocio = :codigo_negocio")
     fun getEstadoEnviado(codigo_negocio: String): Int
 

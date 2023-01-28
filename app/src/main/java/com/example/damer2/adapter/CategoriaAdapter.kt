@@ -14,6 +14,7 @@ class CategoriaAdapter:RecyclerView.Adapter<CategoriaAdapter.ViewHolder>() {
     var descripcions : MutableList<String> = mutableListOf()
     var buttons : MutableList<String> = mutableListOf()
     var onItemClick: ((Categoria) -> Unit)? = null
+    var onItemExcluirClick: ((Categoria) -> Unit)? = null
     var categorias : List<Categoria> = emptyList()
 
     fun setList(miList1: MutableList<String>,miList2: MutableList<String>,miList4:List<Categoria>){
@@ -37,18 +38,24 @@ class CategoriaAdapter:RecyclerView.Adapter<CategoriaAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         var itemCodigo: TextView
-        var itemDescripcion:TextView
         var itemCategoria : Categoria
-        //var itemButton : Button
+        var itemExcluir : Button
+        var itemDescripcion:TextView
 
         init{
             itemCodigo = itemView.findViewById(R.id.card_categoria_codigo)
             itemDescripcion = itemView.findViewById(R.id.card_categoria_tDescripcion)
+            itemExcluir = itemView.findViewById(R.id.categoria_btnExcluir)
+
             itemCategoria = Categoria()
             //itemButton = itemView.findViewById(R.id.btnVerCate)
 
             itemView.setOnClickListener {
                 onItemClick?.invoke(categorias[adapterPosition])
+            }
+
+            itemExcluir.setOnClickListener {
+                onItemExcluirClick?.invoke(categorias[adapterPosition])
             }
         }
     }

@@ -11,6 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -56,14 +57,12 @@ class ProductoAgregarActivity : AppCompatActivity() {
         val producto_agregarCerrar1 = findViewById<ImageView>(R.id.producto_agregarCerrar1)
         val producto_agregarCerrar2 = findViewById<ImageView>(R.id.producto_agregarCerrar2)
         val producto_agregarCerrar3 = findViewById<ImageView>(R.id.producto_agregarCerrar3)
-
+        val producto_agregar_tmensaje = findViewById<TextView>(R.id.producto_agregar_tmensaje)
+        val producto_agregar_fabricante = findViewById<TextView>(R.id.producto_agregar_fabricante)
+        val producto_agregar_marca = findViewById<TextView>(R.id.producto_agregar_marca)
+        val producto_agregar_peso = findViewById<TextView>(R.id.producto_agregar_peso)
 
         val btnAtras = findViewById<ImageView>(R.id.btnAtras)
-
-        val productoActivity = Intent(baseContext, ProductoActivity::class.java)
-
-
-
 
         btnAtras.setOnClickListener{
             finish()
@@ -107,81 +106,82 @@ class ProductoAgregarActivity : AppCompatActivity() {
         }
 
         producto_agregarProducto.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO){
-                val descripcion_producto = producto_agregar_inputBuscarCodigo.text.toString()
-                val miNegocio = db.NegocioDao().get_codigo(cod_negocio)
-                val numProductos = db.ProductoDao().getAllProductos_negocio(cod_negocio).size + 1
+            //Validando campos
+            val nombre = producto_agregar_inputBuscarCodigo.text.toString()
+            val fabricante = producto_agregar_fabricante.text.toString()
+            val marca = producto_agregar_marca.text.toString()
+            val peso = producto_agregar_peso.text.toString()
 
-                var codigo_nuevo = cod_negocio + numProductos.toString()
+            if(nombre!="" && fabricante!="" && marca!="" && peso!=""){
+                runOnUiThread {
+                    producto_agregar_tmensaje.text="Guardando datos..."
+                }
+                lifecycleScope.launch(Dispatchers.IO){
+                    val descripcion_producto = producto_agregar_inputBuscarCodigo.text.toString()
+                    val miNegocio = db.NegocioDao().get_codigo(cod_negocio)
+                    val numProductos = db.ProductoDao().getAllProductos_negocio(cod_negocio).size + 1
 
+                    var codigo_nuevo = cod_negocio + numProductos.toString()
 
-                db.ProductoDao().insert(Producto(
-                    0,
-                    codigo_nuevo,
-                    cod_categoria,
-                    cod_negocio,
-                    descripcion_producto,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "1",
-                    ca_descripcion,
-                    "0",
-                    miNegocio.distrito,
-                    cod_zona,
-                    cod_canal,
-                    "1"
-                ))
+                    db.ProductoDao().insert(Producto(
+                        0,
+                        codigo_nuevo,
+                        cod_categoria,
+                        cod_negocio,
+                        descripcion_producto,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "1",
+                        ca_descripcion,
+                        "0",
+                        miNegocio.distrito,
+                        cod_zona,
+                        cod_canal,
+                        "1",
+                        "0",
+                        fabricante,
+                        marca,
+                        peso
+                    ))
 
-                //Moviendo los archivos a la carpeta con nombre del sku creado
-                var miProd = db.ProductoDao().get_by_codigo(codigo_nuevo)
+                    /*//Moviendo los archivos a la carpeta con nombre del sku creado
+                    var miProd = db.ProductoDao().get_by_codigo(codigo_nuevo)
 
+                    val imageSku1 = findViewById<ImageView>(R.id.imageSku1)
+                    val imageSku2 = findViewById<ImageView>(R.id.imageSku2)
+                    val imageSku3 = findViewById<ImageView>(R.id.imageSku3)*/
 
-                val imageSku1 = findViewById<ImageView>(R.id.imageSku1)
-                val imageSku2 = findViewById<ImageView>(R.id.imageSku2)
-                val imageSku3 = findViewById<ImageView>(R.id.imageSku3)
+                    var i = 0
 
-                var i = 0
+                    var directory = getExternalFilesDir(directorioTemp)!!
+                    directory.walk().forEach {
+                        if(i>0){
+                            val filePath: String = it.getPath()
+                            val bitmap = BitmapFactory.decodeFile(filePath)
 
-                var directory = getExternalFilesDir(directorioTemp)!!
-                directory.walk().forEach {
+                            val bos = ByteArrayOutputStream()
+                            bitmap.compress(CompressFormat.JPEG, 10, bos)
+                            val bitmapdata = bos.toByteArray()
 
-                    if(i>0){
-
-                        val filePath: String = it.getPath()
-                        val bitmap = BitmapFactory.decodeFile(filePath)
-
-                        val bos = ByteArrayOutputStream()
-                        bitmap.compress(CompressFormat.JPEG, 10, bos)
-                        val bitmapdata = bos.toByteArray()
-
-                        val fos = FileOutputStream(it)
-                        fos.write(bitmapdata)
-                        fos.flush()
-                        fos.close()
-
-
-                        val isSuccess = it.renameTo(File(getExternalFilesDir(Environment.DIRECTORY_PICTURES+"/" + miNegocio.codigo_negocio + "/"+codigo_nuevo).toString()+"/"+i+".jpg"))
-
+                            val fos = FileOutputStream(it)
+                            fos.write(bitmapdata)
+                            fos.flush()
+                            fos.close()
+                            val isSuccess = it.renameTo(File(getExternalFilesDir(Environment.DIRECTORY_PICTURES+"/" + miNegocio.codigo_negocio + "/"+codigo_nuevo).toString()+"/"+i+".jpg"))
+                        }
+                        i++
                     }
-                    i++
+                    finish()
+                }
+            }else{
+                runOnUiThread {
+                    producto_agregar_tmensaje.text="Debe llenar todos los campos"
                 }
 
-
-                finish()
-                /*runOnUiThread {
-
-                    productoActivity.putExtra("cod_negocio", cod_negocio)
-                    productoActivity.putExtra("direccion", direccion)
-                    productoActivity.putExtra("cod_categoria", cod_categoria)
-                    productoActivity.putExtra("cod_zona", cod_zona)
-                    productoActivity.putExtra("cod_canal", cod_canal)
-                    productoActivity.putExtra("ca_descripcion", ca_descripcion)
-                    startActivity(productoActivity)
-
-                }*/
             }
+
 
 
         }
@@ -206,9 +206,6 @@ class ProductoAgregarActivity : AppCompatActivity() {
             }else{
                 Toast.makeText(applicationContext,"Máximo 3 fotos", Toast.LENGTH_SHORT).show()
             }
-
-
-            //openCamera.launch(Intent(MediaStore.ACTION_IMAGE_CAPTURE))
         }
 
 
@@ -218,12 +215,10 @@ class ProductoAgregarActivity : AppCompatActivity() {
     private val openCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
-                // val data = result.data!!
-                // val bitmap = data.extras!!.get("data") as Bitmap
                 val bitmap = getBitmap()
 
-
                 binding.img.setImageBitmap(bitmap)
+
             }else if(result.resultCode == RESULT_CANCELED){
                 var directory = getExternalFilesDir(directorioTemp)!!
                 var numFiles = directory.walk().count()

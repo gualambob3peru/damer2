@@ -43,6 +43,7 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
 
         viewHolder.itemDescripcion.text  = this.descripcions[i]
         viewHolder.itemNegocio = this.negocios[i]
+        viewHolder.itemCodigo.text = this.negocios[i].codigo_negocio
 
         val n_v = num_vacios[i]
         val e_e = estado_enviados[i]
@@ -71,11 +72,13 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
         var itemNegocio : Negocio
         var itemButton : Button
         var estadoenvio : Int = 0
+        var itemCodigo : TextView
 
         init{
             itemDescripcion = itemView.findViewById(R.id.card_negocio_tDescripcion)
             itemNegocio = Negocio(0)
             itemButton = itemView.findViewById(R.id.card_negocio_enviar)
+            itemCodigo = itemView.findViewById(R.id.card_negocio_tDireccion)
 
             itemDescripcion.setOnClickListener{
                 onItemClick?.invoke(negocios[adapterPosition])

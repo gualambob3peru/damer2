@@ -152,8 +152,12 @@ class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
                     val inputCompraV = itemView.findViewById<EditText>(R.id.inputCompra)
                     val inputInventarioV = itemView.findViewById<EditText>(R.id.inputInventario)
 
+                    var vantt:Float = 0.0F
+                    if(productos[adapterPosition].vant!=""){
+                        vantt = productos[adapterPosition].vant.toFloat()
+                    }
 
-                    onCompraKey?.invoke(adapterPosition,0,inputCompraV,inputInventarioV,productos[adapterPosition].vant.toFloat(),itemMsg)
+                    onCompraKey?.invoke(adapterPosition,0,inputCompraV,inputInventarioV,vantt,itemMsg)
                 }
                 override fun beforeTextChanged(s: CharSequence, start: Int,
                                                count: Int, after: Int) {
@@ -172,7 +176,12 @@ class ProductoAdapter:RecyclerView.Adapter<ProductoAdapter.ViewHolder>() {
                     val inputCompraV = itemView.findViewById<EditText>(R.id.inputCompra)
                     val inputInventarioV = itemView.findViewById<EditText>(R.id.inputInventario)
 
-                    onInventarioKey?.invoke(adapterPosition,0,inputCompraV,inputInventarioV,productos[adapterPosition].vant.toFloat(),itemMsg)
+                    var vantt:Float = 0.0F
+                    if(productos[adapterPosition].vant!=""){
+                        vantt = productos[adapterPosition].vant.toFloat()
+                    }
+
+                    onInventarioKey?.invoke(adapterPosition,1,inputCompraV,inputInventarioV,vantt.toFloat(),itemMsg)
                 }
                 override fun beforeTextChanged(s: CharSequence, start: Int,
                                                count: Int, after: Int) {}

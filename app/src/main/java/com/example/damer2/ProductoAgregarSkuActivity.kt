@@ -101,8 +101,7 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
                             "",
                             "",
                             "1",
-                            ca_descripcion,
-                            ""
+                            ca_descripcion
                         )
                     )
 

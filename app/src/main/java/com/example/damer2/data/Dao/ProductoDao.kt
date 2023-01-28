@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.damer2.data.Entities.Categoria
+import com.example.damer2.data.Entities.Negocio
 import com.example.damer2.data.Entities.Producto
 import com.example.damer2.data.Entities.Usuario
 import java.util.*
@@ -38,8 +39,11 @@ interface ProductoDao {
     @Query("SELECT id,cod_categoria as codigo,desc_categoria as descripcion,1 estado, 0 tipoDato from Producto WHERE cod_negocio = :cod_negocio GROUP BY cod_categoria,desc_categoria")
      fun getCategorias_negocio(cod_negocio:String ): List<Categoria>
 
-    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND (inventario = '' OR compra='' OR precio ='' OR vant='')")
+    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND sku!='' AND (inventario = '' OR compra='' OR precio ='' OR vant='')")
     fun getNumCampoVacio_by_negocio(cod_negocio: String): Int
+
+    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio and cod_categoria=:cod_categoria")
+    fun getProducto_count_menosCategoria(cod_negocio: String,cod_categoria: String): Int
 
 
 
@@ -49,6 +53,15 @@ interface ProductoDao {
 
     @Query("UPDATE Producto SET  compra=:compra , inventario=:inventario,precio=:precio, ve=:ve WHERE sku=:sku AND cod_negocio = :cod_negocio AND cod_categoria = :cod_categoria")
      fun update_sku(sku:String,cod_negocio:String , cod_categoria:String ,compra:String,inventario:String,precio:String,ve:String)
+
+    @Query("UPDATE Producto SET  estadoEnviado = :estadoEnviado")
+    fun update_estadoEnviado(estadoEnviado:Int )
+
+    @Query("UPDATE Producto SET estadoCambiado=:estadoCambiado WHERE cod_negocio=:cod_negocio and cod_categoria=:cod_categoria")
+    fun update_estadoExcluido(cod_negocio:String, cod_categoria:String, estadoCambiado: Int )
+
+    @Query("UPDATE Producto SET cod_negocio=:cod_new_codigo, cambioNegocio=:cod_negocio WHERE cod_negocio=:cod_negocio and cod_categoria=:cod_categoria")
+    fun update_negocio(cod_negocio:String, cod_categoria:String, cod_new_codigo: String )
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
      fun insert(producto: Producto)

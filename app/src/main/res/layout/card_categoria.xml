@@ -54,6 +54,14 @@
 
         </TextView>
 
+        <Button
+            android:id="@+id/categoria_btnExcluir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Excluir"
+            app:layout_constraintEnd_toEndOf="@+id/card_categoria_tDescripcion"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

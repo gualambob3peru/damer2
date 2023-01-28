@@ -52,6 +52,7 @@ class NegocioActivity : AppCompatActivity() {
         var di_descripcion = intent.getStringExtra("di_descripcion").toString()
         val categoriaActivity = Intent(baseContext, CategoriaActivity::class.java)
         val producto_tMensaje = findViewById<TextView>(R.id.producto_tMensaje)
+        val negocio_btnAgregar = findViewById<ImageView>(R.id.negocio_btnAgregar)
 
         var btnAtras = findViewById<ImageView>(R.id.btnAtras)
 
@@ -153,6 +154,12 @@ class NegocioActivity : AppCompatActivity() {
             }
 
         }
+
+        negocio_btnAgregar.setOnClickListener {
+            val negocioAgregarActivity = Intent(baseContext, NegocioAgregarActivity::class.java)
+            negocioAgregarActivity.putExtra("medicion", UsuarioApplication.prefs.getUsuario()["medicion"])
+            startActivity(negocioAgregarActivity)
+        }
     }
 
     private fun subirProductos(productos: List<Producto>, miNegocio: Negocio) {
@@ -189,7 +196,12 @@ class NegocioActivity : AppCompatActivity() {
                 var todo = response.body()
 
                 lifecycleScope.launch(Dispatchers.IO) {
+                    //Actualizando estado de negocios y productos enviados
                     db.NegocioDao().update_estadoenviado(miNegocio.codigo_negocio,1)
+                    for(produ in productos){
+                        db.ProductoDao().update_estadoEnviado(1)
+                    }
+
                    // uploadFile()
                     val directoryImage = Environment.DIRECTORY_PICTURES
                     val directory = getExternalFilesDir(directoryImage)!!
@@ -232,7 +244,7 @@ class NegocioActivity : AppCompatActivity() {
     }
 
     private fun uploadFile(uri: Uri) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val producto_tMensaje = findViewById<TextView>(R.id.producto_tMensaje)
 
             val stream = contentResolver.openInputStream(uri) ?: return@launch
@@ -280,7 +292,8 @@ class NegocioActivity : AppCompatActivity() {
                         runOnUiThread {
                             producto_tMensaje.text = "Error en el servidor"
                         }
-                        TODO(t.toString() + "fff")
+                        t.toString()
+                       // TODO(t.toString() + "fff")
                     }
 
                 })

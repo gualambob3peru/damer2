@@ -16,4 +16,7 @@ class ProductoModel {
     var marca : String = ""
     var peso : String = ""
     var imagen : String = ""
+    var estadoEnviado : Int = 0
+    var estadoCambiado: Int = 0
+    var cambioNegocio: String=""
 }

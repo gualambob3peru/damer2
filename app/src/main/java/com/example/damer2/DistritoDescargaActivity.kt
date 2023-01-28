@@ -79,9 +79,11 @@ class DistritoDescargaActivity : AppCompatActivity() {
                                     call: Call<NegocioResponse>,
                                     response: Response<NegocioResponse>
                                 ){
+
                                     var negocios = response.body()
 
                                     if (negocios != null) {
+
                                         if(negocios.error.equals("0")){
                                             val contratoInput = ContratoInput(email)
                                             var service2 = ContratoService.create()

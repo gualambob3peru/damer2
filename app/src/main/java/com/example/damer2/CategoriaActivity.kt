@@ -1,10 +1,12 @@
 package com.example.damer2
 
+import android.content.DialogInterface
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,6 @@ import com.example.damer2.data.Entities.Categoria
 import com.example.damer2.shared.UsuarioApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 class CategoriaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +33,7 @@ class CategoriaActivity : AppCompatActivity() {
 
         var categoria_txtNegocio = findViewById<TextView>(R.id.categoria_txtNegocio)
         var btnAtras = findViewById<ImageView>(R.id.btnAtras)
+
 
         val negocioActivity = Intent(baseContext, NegocioActivity::class.java)
 
@@ -85,12 +87,87 @@ class CategoriaActivity : AppCompatActivity() {
 
                 }
 
+                adapter.onItemExcluirClick = {categoria ->
+                    val builder = AlertDialog.Builder(this@CategoriaActivity)
+                    builder.setMessage("Desea excluir?")
+                        .setCancelable(false)
+                        .setPositiveButton("SI") { dialog, id ->
+                            val builder2 = AlertDialog.Builder(this@CategoriaActivity)
+                            builder2.setMessage("Desea incluirlo en otro negocio?")
+                                .setCancelable(false)
+                                .setPositiveButton("SI") { dialog2, id2 ->
 
-                val linearLayoutManager: LinearLayoutManager =
-                    LinearLayoutManager(applicationContext)
-                var recyclerView = findViewById<RecyclerView>(R.id.recyclerViewCategoria)
-                recyclerView.layoutManager = linearLayoutManager
-                recyclerView.adapter = adapter
+                                    lifecycleScope.launch(Dispatchers.IO) {
+                                        //Negocios disponibles
+                                        var negociosDisponibles = db.NegocioDao().getNegociosIncluir(
+                                            miNegocio.canal,
+                                            miNegocio.distrito
+                                        )
+
+                                        val arr_neg = mutableListOf<CharSequence>()
+                                        val arr_cod_nego = mutableListOf<String>()
+
+                                        //Quitando los negocios que ya tienen esa categoria
+                                        for(ne in negociosDisponibles){
+                                            //no agregando a los negocios que ya tienen esa categoria
+                                            val tieneCateg = db.ProductoDao().getProducto_count_menosCategoria(ne.codigo_negocio,categoria.codigo)
+
+                                            if(tieneCateg==0){
+                                                arr_neg.add(ne.descripcion)
+                                                arr_cod_nego.add(ne.codigo_negocio)
+                                            }
+                                        }
+
+
+
+
+                                        val items = arr_neg.toTypedArray()
+
+                                        runOnUiThread{
+                                            val builder3 = AlertDialog.Builder(this@CategoriaActivity)
+                                            builder3
+                                                .setTitle("Negocios")
+                                                .setItems(items,
+                                                    DialogInterface.OnClickListener { dialog3, which ->
+
+                                                        lifecycleScope.launch(Dispatchers.IO){
+                                                            var negoEle = arr_neg[which]
+
+                                                            db.ProductoDao().update_estadoExcluido(cod_negocio,categoria.codigo,3)
+                                                            db.ProductoDao().update_negocio(cod_negocio,categoria.codigo,arr_cod_nego[which])
+                                                        }
+                                                    })
+
+                                            val alert3 = builder3.create()
+                                            alert3.show()
+                                        }
+
+                                    }
+
+                                }
+                                .setNegativeButton("NO") { dialog2, id2 ->
+
+                                    dialog.dismiss()
+                                }
+                            val alert2 = builder2.create()
+                            alert2.show()
+                        }
+                        .setNegativeButton("NO") { dialog, id ->
+
+                            dialog.dismiss()
+                        }
+                    val alert = builder.create()
+                    alert.show()
+                }
+
+                runOnUiThread{
+                    val linearLayoutManager: LinearLayoutManager =
+                        LinearLayoutManager(applicationContext)
+                    var recyclerView = findViewById<RecyclerView>(R.id.recyclerViewCategoria)
+                    recyclerView.layoutManager = linearLayoutManager
+                    recyclerView.adapter = adapter
+                }
+
 
             } else {
                 //No tiene ninguna categoria

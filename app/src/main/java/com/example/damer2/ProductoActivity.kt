@@ -1,30 +1,35 @@
 package com.example.damer2
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.damer2.adapter.ProductoAdapter
+import com.example.damer2.components.producto.ProductoCeroDialog
 import com.example.damer2.data.Database.AuditoriaDb
-import com.example.damer2.data.Entities.Producto
-import com.example.damer2.ProductoAgregarSkuActivity
 import com.example.damer2.data.Entities.Contrato
+import com.example.damer2.data.Entities.Producto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductoActivity : AppCompatActivity() {
+
+class ProductoActivity : AppCompatActivity(){
     companion object {
         var listSkus = Array(1) {Array(8) {""} }
 
     }
     var num = 1
+    var mInput: String? = null
+
+
     override fun onResume() {
         super.onResume()
 
@@ -304,6 +309,11 @@ class ProductoActivity : AppCompatActivity() {
                     );
                 }
 
+                val numVacios = db.ProductoDao().getNumCampoVacio_by_negocio(cod_negocio)
+                if(numVacios==0){
+                    db.NegocioDao().update_estadoenviado(cod_negocio,0)
+                }
+
                 runOnUiThread {
                     Toast.makeText(applicationContext,"Productos Guardados", Toast.LENGTH_SHORT).show()
                 }
@@ -311,53 +321,137 @@ class ProductoActivity : AppCompatActivity() {
         }
 
         producto_btnCeros.setOnClickListener {
-            runOnUiThread {
-               for(i in listSkus.indices ){
-                    if(listSkus[i][0] == ""){
-                        listSkus[i][0] = "0"
-                    }
-                    if(listSkus[i][1] == ""){
-                        listSkus[i][1] = "0"
-                    }
-                    if(listSkus[i][2] == ""){
-                        listSkus[i][2] = "0"
-                    }
-                    if(listSkus[i][3] == ""){
-                        listSkus[i][3] = "0"
-                    }
-               }
 
-                val miSize = listSkus.size - 1
-
-                for(i in 0..miSize){
-                    val miCompra = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputCompra)
-                    val miInventario = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputInventario)
-                    val miPrecio = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputPrecio)
-                    val miVe = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputVe)
-
-                    if(miCompra!=null && miCompra.text.toString()==""){
-                        miCompra.setText("0")
+            lifecycleScope.launch(Dispatchers.IO){
+                val productosCero = db.ProductoDao().getAllProductosNego(cod_negocio,cod_categoria)
+                var a = 0
+                var i=0
+                for(value in productosCero){
+                    if((listSkus[i][0] == "" || listSkus[i][1] == "" || listSkus[i][2] == "" || listSkus[i][3] == ""  )&&(value.compra_ant!="0" || value.vant!="0")){
+                        a = 1
                     }
-
-                    if(miInventario!=null && miInventario.text.toString()==""){
-                        miInventario.setText("0")
-                    }
-
-                    if(miPrecio!=null && miPrecio.text.toString()==""){
-                        miPrecio.setText("0")
-                    }
-
-                    if(miVe!=null && miVe.text.toString()==""){
-                        miVe.setText("0")
-                    }
-
+                    i++
                 }
 
-                Toast.makeText(applicationContext,"Se cambió a ceros", Toast.LENGTH_SHORT).show()
+                if(a==1){
+                    runOnUiThread {
+                        val builder = AlertDialog.Builder(this@ProductoActivity)
+                        builder.setMessage("Estas seguro de poner cerros?")
+                            .setCancelable(false)
+                            .setPositiveButton("SI") { dialog, id ->
 
+
+                                for(i in listSkus.indices ){
+                                    if(listSkus[i][0] == ""){
+                                        listSkus[i][0] = "0"
+                                    }
+                                    if(listSkus[i][1] == ""){
+                                        listSkus[i][1] = "0"
+                                    }
+                                    if(listSkus[i][2] == ""){
+                                        listSkus[i][2] = "0"
+                                    }
+                                    if(listSkus[i][3] == ""){
+                                        listSkus[i][3] = "0"
+                                    }
+                                }
+
+                                val miSize = listSkus.size - 1
+
+                                for(i in 0..miSize){
+                                    val miCompra = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputCompra)
+                                    val miInventario = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputInventario)
+                                    val miPrecio = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputPrecio)
+                                    val miVe = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputVe)
+
+                                    if(miCompra!=null && miCompra.text.toString()==""){
+                                        miCompra.setText("0")
+                                    }
+
+                                    if(miInventario!=null && miInventario.text.toString()==""){
+                                        miInventario.setText("0")
+                                    }
+
+                                    if(miPrecio!=null && miPrecio.text.toString()==""){
+                                        miPrecio.setText("0")
+                                    }
+
+                                    if(miVe!=null && miVe.text.toString()==""){
+                                        miVe.setText("0")
+                                    }
+
+                                }
+
+                                // Toast.makeText(applicationContext,"Se cambió a ceros", Toast.LENGTH_SHORT).show()
+
+
+                            }
+                            .setNegativeButton("NO") { dialog, id ->
+
+                                dialog.dismiss()
+                            }
+                        val alert = builder.create()
+                        alert.show()
+                    }
+
+                }else{
+                    runOnUiThread {
+                        for(i in listSkus.indices ){
+                            if(listSkus[i][0] == ""){
+                                listSkus[i][0] = "0"
+                            }
+                            if(listSkus[i][1] == ""){
+                                listSkus[i][1] = "0"
+                            }
+                            if(listSkus[i][2] == ""){
+                                listSkus[i][2] = "0"
+                            }
+                            if(listSkus[i][3] == ""){
+                                listSkus[i][3] = "0"
+                            }
+                        }
+
+                        val miSize = listSkus.size - 1
+
+                        for(i in 0..miSize){
+                            val miCompra = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputCompra)
+                            val miInventario = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputInventario)
+                            val miPrecio = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputPrecio)
+                            val miVe = recyclerView.findViewHolderForAdapterPosition(i)?.itemView?.findViewById<EditText>(R.id.inputVe)
+
+                            if(miCompra!=null && miCompra.text.toString()==""){
+                                miCompra.setText("0")
+                            }
+
+                            if(miInventario!=null && miInventario.text.toString()==""){
+                                miInventario.setText("0")
+                            }
+
+                            if(miPrecio!=null && miPrecio.text.toString()==""){
+                                miPrecio.setText("0")
+                            }
+
+                            if(miVe!=null && miVe.text.toString()==""){
+                                miVe.setText("0")
+                            }
+
+                        }
+
+                        Toast.makeText(applicationContext,"Se cambió a ceros", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
             }
+
+
+
+
+
         }
+
+
     }
+
 
 
 
