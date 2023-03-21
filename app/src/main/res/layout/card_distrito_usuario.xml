@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_distrito"
+    android:layout_margin="2dp"
+    app:cardBackgroundColor="@color/azul_1"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="6dp"
+    app:contentPadding="2dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+
+        <TextView
+            android:id="@+id/card_distrito_usuario_tDescripcion"
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Hola Hola"
+            android:textColor="@color/white"
+            android:textSize="16dp">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/card_distrito_usuario_btnVer"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="4dp"
+            android:backgroundTint="@color/rojo_1"
+            android:text="Ver"
+            android:textSize="9dp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

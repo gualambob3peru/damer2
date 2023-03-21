@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_negocio"
+    android:layout_margin="2dp"
+
+    app:cardCornerRadius="5dp"
+    app:cardElevation="6dp"
+    app:contentPadding="2dp"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+
+
+        <TextView
+            android:id="@+id/card_negocio_tDescripcion"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:background="@color/azul_2"
+
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="10dp"
+            android:text=" NEGOCIO ABDFREG"
+            android:textColor="@color/white"
+            android:textSize="13dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.71">
+
+        </TextView>
+
+        <Button
+            android:id="@+id/card_negocio_enviar"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            app:layout_constraintWidth_percent="0.25"
+
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="@color/rojo_2"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="ENVIAR"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/card_negocio_tDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:paddingLeft="3dp"
+            android:paddingBottom="5dp"
+            android:text="102023"
+            android:textColor="@color/azul_1"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/card_negocio_tCanal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="50dp"
+            android:paddingBottom="5dp"
+            android:text="CANAL"
+            android:textColor="@color/azul_1"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/card_negocio_tDireccion"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/negocio_excluido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:textColor="@color/white"
+            android:background="@color/rojo_1"
+            android:text=""
+
+            app:layout_constraintEnd_toEndOf="@+id/card_negocio_tDescripcion"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_baja"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:text="BAJA T."
+            app:layout_constraintWidth_percent="0.25"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_negocio_tDescripcion" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

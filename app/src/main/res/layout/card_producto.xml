@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ruta_card_view"
+    android:layout_margin="1dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp"
+    app:contentPadding="4dp"
+    android:backgroundTint="@color/plomo_1"
+
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <TextView
+            android:id="@+id/tCodigoProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:text="2020-05-25"
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/txtVant">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/producto_msgRegla1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nos e"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/rojo_1"
+            android:textSize="9dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/producto_msgRegla3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_marginStart="134dp"
+            android:textColor="@color/rojo_1"
+            android:textSize="9dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tDescripcionProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="13dp"
+            android:text="Hola Hola"
+            android:textColor="@color/azul_1"
+            android:textSize="11dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView9">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/inputCompra"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:paddingRight="4dp"
+            android:maxLength="8"
+            android:textColor="#FF0000"
+            android:textAlignment="center"
+            android:background="@color/azul_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/inputInventario"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:layout_marginLeft="2dp"
+            android:maxLength="8"
+            android:textColor="#FF0000"
+            android:textAlignment="center"
+            android:background="@color/azul_2"
+            app:layout_constraintStart_toEndOf="@+id/inputCompra"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/inputPrecio"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:layout_marginLeft="2dp"
+            android:maxLength="8"
+            android:textColor="#FF0000"
+            android:textAlignment="center"
+            android:background="@color/azul_2"
+            app:layout_constraintStart_toEndOf="@+id/inputInventario"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="4dp"
+            android:text="Compra"
+            android:textSize="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputCompra" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="24dp"
+            android:text="Inventario"
+            android:textSize="10dp"
+            app:layout_constraintStart_toEndOf="@+id/textView9"
+            app:layout_constraintTop_toBottomOf="@+id/inputInventario" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginStart="28dp"
+            android:text="Precio"
+            android:textSize="10dp"
+            app:layout_constraintStart_toEndOf="@+id/textView10"
+            app:layout_constraintTop_toBottomOf="@+id/inputPrecio" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="16dp"
+            android:layout_height="13dp"
+
+            android:layout_marginStart="38dp"
+            android:text="VE"
+            android:textSize="10dp"
+            app:layout_constraintStart_toEndOf="@+id/textView11"
+            app:layout_constraintTop_toBottomOf="@+id/inputVe" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:text="S : "
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/inputVe"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+        <EditText
+            android:id="@+id/inputVe"
+            android:layout_width="58dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:layout_marginLeft="2dp"
+            android:maxLength="8"
+            android:text=""
+            android:textColor="#FF0000"
+            android:textAlignment="center"
+            android:background="@color/azul_2"
+            app:layout_constraintStart_toEndOf="@+id/inputPrecio"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:text="IA: "
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/inputVe"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:text="CA: "
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/inputVe"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtVant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="V ant: "
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/txtcoant" />
+
+        <TextView
+            android:id="@+id/txtcoant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Co ant: "
+            android:textSize="12dp"
+            android:textColor="@color/azul_1"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
