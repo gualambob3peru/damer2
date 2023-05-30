@@ -16,6 +16,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.core.net.toUri
+import androidx.core.view.iterator
+import androidx.core.view.size
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,15 +45,16 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class NegocioActivity : AppCompatActivity() {
 
     var num = 1
+
+    val db = AuditoriaDb(this)
     override fun onResume() {
         super.onResume()
 
         if(num!=1){
-            actualizar();
+            actualizar()
         }else{
             num++
         }
@@ -62,9 +65,8 @@ class NegocioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_negocio)
 
-        val db = AuditoriaDb(this)
 
-        val email = UsuarioApplication.prefs.getUsuario()["email"].toString()
+
         var medicion = UsuarioApplication.prefs.getUsuario()["medicion"].toString()
         var cod_distrito = intent.getStringExtra("cod_distrito").toString()
         var cod_zona = intent.getStringExtra("cod_zona").toString()
@@ -74,11 +76,12 @@ class NegocioActivity : AppCompatActivity() {
         val negocio_btnAgregar = findViewById<ImageView>(R.id.negocio_btnAgregar)
         val negocio_btnBuscar = findViewById<Button>(R.id.negocio_btnBuscar)
         val negocio_txtBuscarNegocio = findViewById<TextView>(R.id.negocio_txtBuscarNegocio)
-
+        val negocio_btnStorageAr = findViewById<ImageView>(R.id.negocio_btnStorageAr)
+        val txtCantNegocios = findViewById<TextView>(R.id.txtCantNegocios)
 
         val textView2 = findViewById<TextView>(R.id.txtMedicion)
         textView2.text = "MEDICION : "+ medicion.toString()
-        val recyclerView = findViewById<RecyclerView>(R.id.recycleViewNegocio)
+        var recyclerView = findViewById<RecyclerView>(R.id.recycleViewNegocio)
 
         var btnAtras = findViewById<ImageView>(R.id.btnAtras)
 
@@ -96,6 +99,9 @@ class NegocioActivity : AppCompatActivity() {
                 var arr_estado_enviado: MutableList<Int> = mutableListOf()
                 var arr_num_productos: MutableList<Int> = mutableListOf()
                 val arr_canals: MutableList<String> = mutableListOf()
+
+                //Mostrando cantidad de negocios
+                txtCantNegocios.text = negocios.size.toString()
 
                 for (negocio in negocios) {
                     arr_codigo.add(negocio.codigo_negocio)
@@ -165,7 +171,7 @@ class NegocioActivity : AppCompatActivity() {
                                             lifecycleScope.launch(Dispatchers.IO) {
                                                 var productos = db.ProductoDao().getAllProductos_negocio(negocio.codigo_negocio)
                                                 var elNegocio = db.NegocioDao().get_codigo(negocio.codigo_negocio)
-                                                subirProductos(productos,elNegocio)
+                                                subirProductos(productos,elNegocio,boton)
 
                                             }
                                         }else{
@@ -184,7 +190,7 @@ class NegocioActivity : AppCompatActivity() {
                                                         lifecycleScope.launch(Dispatchers.IO) {
                                                             var productos = db.ProductoDao().getAllProductos_negocio(negocio.codigo_negocio)
                                                             var elNegocio = db.NegocioDao().get_codigo(negocio.codigo_negocio)
-                                                            subirProductos(productos,elNegocio)
+                                                            subirProductos(productos,elNegocio,boton)
 
                                                         }
                                                     }
@@ -310,6 +316,28 @@ class NegocioActivity : AppCompatActivity() {
 
                 }
 
+                adapter.onItemBtnArchivarClick = {negocio ->
+                    val builder = AlertDialog.Builder(this@NegocioActivity)
+                    builder.setMessage("¿Desea archivar el negocio?")
+                        .setCancelable(false)
+                        .setPositiveButton("SI"){dialog, id ->
+                            val cod_negocio = negocio.codigo_negocio
+                            lifecycleScope.launch(Dispatchers.IO){
+                                db.NegocioDao().update_archivar(cod_negocio)
+                                actualizar()
+                            }
+                        }
+                        .setNegativeButton("NO") { dialog, id ->
+
+                            dialog.dismiss()
+                        }
+                    val alert = builder.create()
+                    alert.show()
+
+
+
+                }
+
                 runOnUiThread {
                     val linearLayoutManager: LinearLayoutManager =
                         LinearLayoutManager(applicationContext)
@@ -332,12 +360,27 @@ class NegocioActivity : AppCompatActivity() {
 
         }
 
+        negocio_btnStorageAr.setOnClickListener{
+            val negocioArchivadoActivity = Intent(baseContext, NegocioArchivadoActivity::class.java)
+            negocioArchivadoActivity.putExtra("medicion", UsuarioApplication.prefs.getUsuario()["medicion"])
+            negocioArchivadoActivity.putExtra("cod_distrito", cod_distrito)
+            negocioArchivadoActivity.putExtra("cod_zona", cod_zona)
+            startActivity(negocioArchivadoActivity)
+        }
+
         negocio_btnBuscar.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO){
 
                 val texto = negocio_txtBuscarNegocio.text.toString()
                 var negocios = db.NegocioDao().get_distrito(cod_distrito)
+                var cant = negocios.size
 
+                runOnUiThread {
+
+                    recyclerView.scrollToPosition(cant-3)
+
+                }
+                Thread.sleep(1000)
                 for(i in negocios.indices){
                     if(negocios[i].descripcion.uppercase().contains(texto.uppercase()) || negocios[i].codigo_negocio.uppercase().contains(texto.uppercase())){
                         runOnUiThread {
@@ -360,9 +403,48 @@ class NegocioActivity : AppCompatActivity() {
             negocioAgregarActivity.putExtra("cod_zona", cod_zona)
             startActivity(negocioAgregarActivity)
         }
+
+        fun actualizarNegociosView(){
+
+            lifecycleScope.launch(Dispatchers.IO){
+
+
+
+                for(divNegocio in recyclerView.iterator()){
+                    val viewNegocio = divNegocio.findViewById<TextView>(R.id.card_negocio_tDireccion)
+                    val cod_negocio = viewNegocio.text.toString()
+                    val miNegocio = db.NegocioDao().get_codigo(cod_negocio)
+                    val numVacios = db.ProductoDao().getGuardados_by_negocio(cod_negocio)
+
+                    divNegocio.findViewById<TextView>(R.id.card_negocio_tDescripcion).text = miNegocio.descripcion
+                    var miBoton = divNegocio.findViewById<Button>(R.id.card_negocio_enviar)
+
+                    if(miNegocio.estadoEnviado==1){//verde
+                        runOnUiThread {
+                            miBoton.setBackgroundResource(R.color.verde_1)
+                        }
+                    }else{
+                        if(numVacios>0){//Rojo
+                            runOnUiThread {
+                                miBoton.setBackgroundResource(R.color.rojo_1)
+                            }
+
+                        }else if(numVacios==0){//Amarillo
+                            runOnUiThread {
+                                miBoton.setBackgroundResource(R.color.amarillo_1)
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
+
+        }
     }
 
-    private fun subirProductos(productos: List<Producto>, miNegocio: Negocio) {
+    private fun subirProductos(productos: List<Producto>, miNegocio: Negocio, miBoton: Button) {
         var datosSubida = mutableMapOf<String,String>()
         datosSubida["email"] = prefs.getUsuario()["email"].toString()
         datosSubida["medicion"] = prefs.getUsuario()["medicion"].toString()
@@ -399,7 +481,7 @@ class NegocioActivity : AppCompatActivity() {
                     //Actualizando estado de negocios y productos enviados
                     db.NegocioDao().update_estadoenviado(miNegocio.codigo_negocio,1)
                     for(produ in productos){
-                        db.ProductoDao().update_estadoEnviado(1)
+                        db.ProductoDao().update_estadoEnviado_negocio(miNegocio.codigo_negocio,1)
                     }
 
                    // uploadFile()
@@ -426,6 +508,7 @@ class NegocioActivity : AppCompatActivity() {
                     }else{
                         runOnUiThread {
                             producto_tMensaje.text = "Negocio subido"
+                            miBoton.setBackgroundResource(R.color.verde_1)
 
                         }
                         actualizar()
@@ -524,4 +607,5 @@ class NegocioActivity : AppCompatActivity() {
 
 
     }
+
 }

@@ -131,7 +131,7 @@ class ResumenActivity : AppCompatActivity() {
                 for(distrito in distritos){
                     arr_codigo.add(distrito.codigo)
                     arr_descripcion.add(distrito.descripcion) // -->> Direccion
-                    var n_distrito= DistritoUsuario(0,distrito.codigo,distrito.descripcion)
+                    var n_distrito= DistritoUsuario(0,distrito.codigo,distrito.descripcion,distrito.cod_zona)
                     arr_distrito.add(n_distrito)
                 }
 
@@ -185,6 +185,12 @@ class ResumenActivity : AppCompatActivity() {
                             db.UsuarioDao().borrarTodo()
                             db.ZonaDao().borrarTodo()
                             finish()
+
+                            runOnUiThread {
+                                val main = Intent(baseContext, MainActivity::class.java)
+
+                                startActivity(main)
+                            }
                         }
                     }
                     .setNegativeButton("NO") { dialog, id ->

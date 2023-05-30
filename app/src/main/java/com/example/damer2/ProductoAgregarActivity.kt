@@ -118,7 +118,11 @@ class ProductoAgregarActivity : AppCompatActivity() {
             val marca = producto_agregar_marca.text.toString()
             val peso = producto_agregar_peso.text.toString()
 
-            if(nombre!="" && fabricante!="" && marca!="" && peso!=""){
+            var directory = getExternalFilesDir(directorioTemp)!!
+            var numFiles = directory.walk().count()
+
+
+            if(nombre!="" && fabricante!="" && marca!="" && peso!="" && numFiles>1){
                 runOnUiThread {
                     producto_agregar_tmensaje.text="Guardando datos..."
                 }
@@ -181,13 +185,6 @@ class ProductoAgregarActivity : AppCompatActivity() {
                         peso
                     ))
 
-                    /*//Moviendo los archivos a la carpeta con nombre del sku creado
-                    var miProd = db.ProductoDao().get_by_codigo(codigo_nuevo)
-
-                    val imageSku1 = findViewById<ImageView>(R.id.imageSku1)
-                    val imageSku2 = findViewById<ImageView>(R.id.imageSku2)
-                    val imageSku3 = findViewById<ImageView>(R.id.imageSku3)*/
-
                     var i = 0
 
                     var directory = getExternalFilesDir(directorioTemp)!!
@@ -212,7 +209,7 @@ class ProductoAgregarActivity : AppCompatActivity() {
                 }
             }else{
                 runOnUiThread {
-                    producto_agregar_tmensaje.text="Debe llenar todos los campos"
+                    producto_agregar_tmensaje.text="Debe llenar todos los campos y tener al menos una foto"
                 }
 
             }

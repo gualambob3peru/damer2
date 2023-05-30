@@ -80,187 +80,218 @@ class MainActivity : AppCompatActivity() {
                                     var Produ = db.ProductoMasterDao().getCount()
 
                                     if(Produ!=0) {
-                                        runOnUiThread {
-                                            botonLogin.isEnabled = true
-                                            val resumenActivity =
-                                                Intent(baseContext, ResumenActivity::class.java)
-                                            resumenActivity.putExtra(
-                                                "medicion",
-                                                prefs.getUsuario()["medicion"]
-                                            )
-                                            startActivity(resumenActivity)
-                                        }
-                                    } else if(Produ==0){
-                                        db.GeneralDao().borrarTodo() //Borrando parametros de medicion
-
-
-                                        var serviceTodo = TodoService.create()
-                                        var apiInterfaceTodo = serviceTodo.get()
-
-                                        apiInterfaceTodo.enqueue( object : Callback<TodoResponse>
-                                        {
-                                            override fun onResponse(
-                                                call: Call<TodoResponse>,
-                                                response: Response<TodoResponse>
-                                            ) {
-                                                lifecycleScope.launch(Dispatchers.IO){
-                                                    var todo = response.body()
-
-                                                    runOnUiThread {
-
-                                                        tmensaje.text = "Cargando datos..."
-                                                    }
-                                                    if (todo != null) {
-                                                        var categorias = todo.body.categorias
-                                                        if(categorias!=null){
-                                                            db.CategoriaDao().borrarTodo()
-                                                            for(categoria in categorias){
-                                                                db.CategoriaDao().insert(Categoria(0,categoria.codigo,categoria.descripcion,"1",categoria.tipoDato))
-
-                                                            }
-                                                        }
-
-                                                        var zonas = todo.body.zonas
-                                                        if(zonas!=null){
-                                                            db.ZonaDao().borrarTodo()
-                                                            for(zona in zonas){
-                                                                db.ZonaDao().insert(Zona(0,zona.codigo,zona.descripcion))
-
-                                                            }
-                                                        }
-
-                                                        var canals = todo.body.canals
-                                                        if(canals!=null){
-                                                            db.CanalDao().borrarTodo()
-                                                            for(canal in canals){
-                                                                db.CanalDao().insert(Canal(0,canal.codigo,canal.descripcion))
-
-                                                            }
-                                                        }
-
-                                                        var distritos = todo.body.distritos
-                                                        if(distritos!=null){
-                                                            db.DistritoDao().borrarTodo()
-                                                            for(distrito in distritos){
-                                                                db.DistritoDao().insert(Distrito(0,distrito.codigo,distrito.descripcion,distrito.cod_zona))
-
-                                                            }
-                                                        }
-
-                                                        var productos = todo.body.productos
-                                                        if(productos!=null){
-                                                            db.ProductoMasterDao().borrarAllAll()
-                                                            for(producto in productos){
-                                                                db.ProductoMasterDao().insert(
-                                                                    ProductoMaster(
-                                                                        0,
-                                                                        producto.sku,
-                                                                        producto.descripcion,
-                                                                        "1",
-                                                                        producto.cod_categoria
-                                                                    )
-                                                                )
-                                                            }
-                                                        }
-
-
-                                                        db.UsuarioDao().borrarTodo()
-
-                                                        val u = usuario.user[0]
-
-                                                        var miUsuario = Usuario(
-                                                            u.id.toInt(),
-                                                            u.nombres,
-                                                            u.apellidoPaterno,
-                                                            u.apellidoMaterno,
-                                                            txtPassword.text.toString(),
-                                                            u.email,
-                                                            u.telefono,
-                                                            u.created_at,
-                                                            u.idCargo,
-                                                            u.estado,
-                                                            u.idTipoDocumento,
-                                                            u.nroDocumento
-                                                        )
-
-                                                        db.UsuarioDao().insert(listOf(miUsuario))
+                                        if(prefs.getUsuario()["email"] == txtEmail.text.toString()){
+                                            runOnUiThread {
 
 
 
-
-                                                        //Guardando en shared usuario
-                                                        var sharedUsuario = emptyMap<String,String>().toMutableMap()
-                                                        sharedUsuario["id"] = u.id.toString()
-                                                        sharedUsuario["nombres"] = u.nombres
-                                                        sharedUsuario["apellidoPaterno"] = u.apellidoPaterno
-                                                        sharedUsuario["apellidoMaterno"] = u.apellidoMaterno
-                                                        sharedUsuario["password"] = u.password
-                                                        sharedUsuario["email"] = u.email
-                                                        sharedUsuario["telefono"] = u.telefono
-                                                        sharedUsuario["created_at"] = u.created_at
-                                                        sharedUsuario["idCargo"] = u.idCargo
-                                                        sharedUsuario["estado"] = u.estado
-                                                        sharedUsuario["idTipoDocumento"] = u.idTipoDocumento
-                                                        sharedUsuario["nroDocumento"] = u.nroDocumento
-                                                        sharedUsuario["medicion"] = todo.body.datos["medicion"].toString()
-                                                        sharedUsuario["anio"] = todo.body.datos["anio"].toString()
-                                                        sharedUsuario["mes"] = todo.body.datos["mes"].toString()
-                                                        sharedUsuario["contrasena"] = txtPassword.text.toString()
-
-
-                                                        prefs.setUsuario(sharedUsuario)
-
-
-                                                        db.GeneralDao().borrarTodo() //Limpiando
-                                                        db.GeneralDao().insert(
-                                                            General(
-                                                            0,
-                                                            "medicion",
-                                                                todo.body.datos["medicion"].toString()
-                                                            )
-                                                        )
-
-                                                        //Parametros
-                                                        val generales = todo.body.generales
-
-                                                        for(general in generales){
-                                                            db.GeneralDao().insert(
-                                                                General(
-                                                                    0,
-                                                                    general.parametro,
-                                                                    general.descripcion,
-                                                                    general.valor,
-                                                                    general.estado
-                                                                )
-                                                            )
-                                                        }
-
-
-
-                                                        runOnUiThread {
-                                                            botonLogin.isEnabled= true
-                                                            resumenActivity.putExtra("medicion", prefs.getUsuario()["medicion"])
-                                                            startActivity(resumenActivity)
-                                                        }
-
-                                                    }
-
-                                                }
+                                                botonLogin.isEnabled = true
+                                                val resumenActivity =
+                                                    Intent(baseContext, ResumenActivity::class.java)
+                                                resumenActivity.putExtra(
+                                                    "medicion",
+                                                    prefs.getUsuario()["medicion"]
+                                                )
+                                                startActivity(resumenActivity)
 
                                             }
+                                            return@launch
+                                        }
 
-                                            override fun onFailure(call: Call<TodoResponse>, t: Throwable) {
+
+                                    }
+
+                                    db.GeneralDao().borrarTodo() //Borrando parametros de medicion
+
+
+                                    var serviceTodo = TodoService.create()
+                                    var apiInterfaceTodo = serviceTodo.get()
+
+                                    apiInterfaceTodo.enqueue( object : Callback<TodoResponse>
+                                    {
+                                        override fun onResponse(
+                                            call: Call<TodoResponse>,
+                                            response: Response<TodoResponse>
+                                        ) {
+                                            lifecycleScope.launch(Dispatchers.IO){
+                                                var todo = response.body()
+
                                                 runOnUiThread {
 
-                                                    tmensaje.text = "Hubo un error de conexión"
-                                                    botonLogin.isEnabled= true
+                                                    tmensaje.text = "Cargando datos..."
+                                                }
+                                                if (todo != null) {
+                                                    db.CanalDao().borrarTodo()
+                                                    db.CategoriaDao().borrarTodo()
+                                                    db.ContratoDao().borrarTodo()
+                                                    db.DistritoDao().borrarTodo()
+                                                    db.DistritoUsuarioDao().borrarTodo()
+                                                    db.GeneralDao().borrarTodo()
+                                                    db.GlobalDao().borrarTodo()
+                                                    db.NegocioDao().borrarTodo()
+                                                    db.ProductoDao().borrarAllAll()
+                                                    db.ProductoMasterDao().borrarAllAll()
+                                                    db.UsuarioDao().borrarTodo()
+                                                    db.ZonaDao().borrarTodo()
+
+
+                                                    var categorias = todo.body.categorias
+                                                    if(categorias!=null){
+                                                        db.CategoriaDao().borrarTodo()
+                                                        for(categoria in categorias){
+                                                            db.CategoriaDao().insert(Categoria(0,categoria.codigo,categoria.descripcion,"1",categoria.tipoDato))
+
+                                                        }
+                                                    }
+
+                                                    var zonas = todo.body.zonas
+                                                    if(zonas!=null){
+                                                        db.ZonaDao().borrarTodo()
+                                                        for(zona in zonas){
+                                                            db.ZonaDao().insert(Zona(0,zona.codigo,zona.descripcion))
+
+                                                        }
+                                                    }
+
+                                                    var canals = todo.body.canals
+                                                    if(canals!=null){
+                                                        db.CanalDao().borrarTodo()
+                                                        for(canal in canals){
+                                                            db.CanalDao().insert(Canal(0,canal.codigo,canal.descripcion))
+
+                                                        }
+                                                    }
+
+                                                    var distritos = todo.body.distritos
+                                                    if(distritos!=null){
+                                                        db.DistritoDao().borrarTodo()
+                                                        for(distrito in distritos){
+                                                            db.DistritoDao().insert(Distrito(0,distrito.codigo,distrito.descripcion,distrito.cod_zona))
+
+                                                        }
+                                                    }
+
+                                                    var productos = todo.body.productos
+                                                    if(productos!=null){
+                                                        db.ProductoMasterDao().borrarAllAll()
+                                                        for(producto in productos){
+                                                            db.ProductoMasterDao().insert(
+                                                                ProductoMaster(
+                                                                    0,
+                                                                    producto.sku,
+                                                                    producto.descripcion,
+                                                                    "1",
+                                                                    producto.cod_categoria
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+
+
+                                                    db.UsuarioDao().borrarTodo()
+
+                                                    val u = usuario.user[0]
+
+                                                    var miUsuario = Usuario(
+                                                        u.id.toInt(),
+                                                        u.nombres,
+                                                        u.apellidoPaterno,
+                                                        u.apellidoMaterno,
+                                                        txtPassword.text.toString(),
+                                                        u.email,
+                                                        u.telefono,
+                                                        u.created_at,
+                                                        u.idCargo,
+                                                        u.estado,
+                                                        u.idTipoDocumento,
+                                                        u.nroDocumento
+                                                    )
+
+                                                    db.UsuarioDao().insert(listOf(miUsuario))
+
+
+
+
+                                                    //Guardando en shared usuario
+                                                    var sharedUsuario = emptyMap<String,String>().toMutableMap()
+                                                    sharedUsuario["id"] = u.id.toString()
+                                                    sharedUsuario["nombres"] = u.nombres
+                                                    sharedUsuario["apellidoPaterno"] = u.apellidoPaterno
+                                                    sharedUsuario["apellidoMaterno"] = u.apellidoMaterno
+                                                    sharedUsuario["password"] = u.password
+                                                    sharedUsuario["email"] = u.email
+                                                    sharedUsuario["telefono"] = u.telefono
+                                                    sharedUsuario["created_at"] = u.created_at
+                                                    sharedUsuario["idCargo"] = u.idCargo
+                                                    sharedUsuario["estado"] = u.estado
+                                                    sharedUsuario["idTipoDocumento"] = u.idTipoDocumento
+                                                    sharedUsuario["nroDocumento"] = u.nroDocumento
+                                                    sharedUsuario["medicion"] = todo.body.datos["medicion"].toString()
+                                                    sharedUsuario["anio"] = todo.body.datos["anio"].toString()
+                                                    sharedUsuario["mes"] = todo.body.datos["mes"].toString()
+                                                    sharedUsuario["contrasena"] = txtPassword.text.toString()
+
+
+                                                    prefs.setUsuario(sharedUsuario)
+
+
+                                                    db.GeneralDao().borrarTodo() //Limpiando
+                                                    db.GeneralDao().insert(
+                                                        General(
+                                                        0,
+                                                        "medicion",
+                                                            todo.body.datos["medicion"].toString()
+                                                        )
+                                                    )
+
+                                                    //Parametros
+                                                    val generales = todo.body.generales
+
+                                                    for(general in generales){
+                                                        db.GeneralDao().insert(
+                                                            General(
+                                                                0,
+                                                                general.parametro,
+                                                                general.descripcion,
+                                                                general.valor,
+                                                                general.estado
+                                                            )
+                                                        )
+                                                    }
+
+
+
+                                                    runOnUiThread {
+                                                        botonLogin.isEnabled= true
+                                                        resumenActivity.putExtra("medicion", prefs.getUsuario()["medicion"])
+                                                        startActivity(resumenActivity)
+                                                    }
+
                                                 }
 
-                                                //TODO(t.toString() + "fff")
                                             }
 
-                                        })
-                                    }
+                                        }
+
+                                        override fun onFailure(call: Call<TodoResponse>, t: Throwable) {
+                                            runOnUiThread {
+
+                                                tmensaje.text = "Hubo un error de conexión"
+                                                botonLogin.isEnabled= true
+                                            }
+
+                                            //TODO(t.toString() + "fff")
+                                        }
+
+                                    })
+
+
+
+
+
+
+
+
 
                                 }
 
@@ -268,6 +299,7 @@ class MainActivity : AppCompatActivity() {
                             }else if(usuario.error.equals("1")){
                                 runOnUiThread {
                                     tmensaje.text = usuario.message
+                                    botonLogin.isEnabled= true
                                 }
 
                             }
@@ -295,12 +327,14 @@ class MainActivity : AppCompatActivity() {
                                     runOnUiThread {
 
                                         tmensaje.text = "Usuario o contraseña incorrecta"
+                                        botonLogin.isEnabled= true
                                     }
                                 }
                             }else{
                                 runOnUiThread {
 
                                     tmensaje.text = "Error en el servidor, intente luego"
+                                    botonLogin.isEnabled= true
                                 }
                             }
                             runOnUiThread {

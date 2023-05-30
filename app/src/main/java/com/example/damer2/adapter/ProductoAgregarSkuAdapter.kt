@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.damer2.ProductoActivity
 import com.example.damer2.R
@@ -17,11 +18,15 @@ import com.example.damer2.data.Entities.Categoria
 import com.example.damer2.data.Entities.Contrato
 import com.example.damer2.data.Entities.Producto
 import com.example.damer2.data.Entities.ProductoMaster
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
+import kotlin.coroutines.coroutineContext
 
 class ProductoAgregarSkuAdapter:RecyclerView.Adapter<ProductoAgregarSkuAdapter.ViewHolder>() {
     var codigos : MutableList<String> = mutableListOf()
     var descripcions : MutableList<String> = mutableListOf()
-    var onItemClick: ((ProductoMaster) -> Unit)? = null
+    var onItemClick: ((ProductoMaster,TextView,TextView) -> Unit)? = null
     var productos : List<ProductoMaster> = emptyList()
 
 
@@ -51,6 +56,7 @@ class ProductoAgregarSkuAdapter:RecyclerView.Adapter<ProductoAgregarSkuAdapter.V
         var itemDescripcion:TextView
         var itemProducto : ProductoMaster
 
+
         //  var itemButton : Button
 
         init{
@@ -60,8 +66,9 @@ class ProductoAgregarSkuAdapter:RecyclerView.Adapter<ProductoAgregarSkuAdapter.V
             itemProducto = ProductoMaster()
 
 
+
             itemView.setOnClickListener {
-                onItemClick?.invoke(productos[adapterPosition])
+                onItemClick?.invoke(productos[adapterPosition],itemCodigo,itemDescripcion)
             }
 
         }

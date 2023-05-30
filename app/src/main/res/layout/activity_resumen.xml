@@ -101,7 +101,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/resumenCantidadEnviado"
+                android:id="@+id/resumenNegocioEnviado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".30"
@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/resumenNegocioEnviado"
+                android:id="@+id/resumenCantidadEnviado"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".30"

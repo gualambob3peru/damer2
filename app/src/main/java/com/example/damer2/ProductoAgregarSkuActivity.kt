@@ -51,11 +51,9 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
         val producto_agregar_tSkuGuardar = findViewById<TextView>(R.id.producto_agregar_tSkuGuardar)
         val btnAtras = findViewById<ImageView>(R.id.btnAtras)
 
-
-        val productoActivity = Intent(baseContext, ProductoActivity::class.java)
-
         var adapter = ProductoAgregarSkuAdapter()
         var skuBuscado = ""
+        var arr_skus = mutableListOf<String>()
 
 
         val linearLayoutManager: LinearLayoutManager = LinearLayoutManager(applicationContext)
@@ -63,21 +61,27 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
         recyclerView.layoutManager = linearLayoutManager
 
         producto_agregar_btnBuscarCodigo.setOnClickListener {
+            arr_skus = mutableListOf<String>()
             lifecycleScope.launch(Dispatchers.IO){
                 var codigo_sku = producto_agregar_inputBuscarCodigo.text.toString()
                 var producto = db.ProductoMasterDao().getsku_categoria(codigo_sku,cod_categoria)
                 var productoUsado = db.ProductoDao().get_x_categoria_sku(cod_negocio,cod_categoria,codigo_sku)
 
-
-
                 runOnUiThread {
                     if(productoUsado>0){
                         producto_agregar_tDescripcion_codigo.text = "Este SKU ya se esta utilizando"
                     }else{
+
+
+
                         if(producto != null){
                             producto_agregar_tDescripcion_codigo.text = producto.descripcion
                             skuBuscado = codigo_sku
+                            arr_skus.add(skuBuscado)
                             producto_agregar_tSkuGuardar.text = codigo_sku
+
+
+
                         }else{
                             producto_agregar_tDescripcion_codigo.text = "SKU no válido"
                             skuBuscado = ""
@@ -90,68 +94,66 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
         }
 
         producto_agregar_btnGuardarCodigo.setOnClickListener {
-            if(skuBuscado == ""){
-                Toast.makeText(applicationContext,"SKU no válido", Toast.LENGTH_SHORT).show()
+            if(arr_skus.size==0){
+                Toast.makeText(applicationContext,"No hay SKUs para guardar", Toast.LENGTH_SHORT).show()
             }else{
                 lifecycleScope.launch(Dispatchers.IO){
-                    var producto = db.ProductoMasterDao().getsku(skuBuscado)
-                    var miContrato = db.ContratoDao().get_contrato(cod_categoria,cod_zona,cod_canal)
-                    if(miContrato == null) miContrato= Contrato()
-                    //Verificando variables
-                    var variables = miContrato.variables
-                    if(variables == ""){
-                        variables = "1,2,3,4"
-                    }
-                    var arr_variables= variables.split(",")
-
-                    var compra = "-"
-                    var inventario = "-"
-                    var precio = "-"
-                    var ve = "-"
-
-                    for (varia in arr_variables){
-                        if(varia=="1"){
-                            compra=""
-                        }else if(varia=="2"){
-                           inventario=""
-                        }else if(varia=="3"){
-                           precio=""
-                        }else if(varia=="4"){
-                            ve=""
+                    for ( sku in arr_skus){
+                        var producto = db.ProductoMasterDao().getsku(sku)
+                        var miContrato = db.ContratoDao().get_contrato(cod_categoria,cod_zona,cod_canal)
+                        if(miContrato == null) miContrato= Contrato()
+                        //Verificando variables
+                        var variables = miContrato.variables
+                        if(variables == ""){
+                            variables = "1,2,3,4"
                         }
+                        var arr_variables= variables.split(",")
+
+                        var compra = "-"
+                        var inventario = "-"
+                        var precio = "-"
+                        var ve = "-"
+
+                        for (varia in arr_variables){
+                            if(varia=="1"){
+                                compra=""
+                            }else if(varia=="2"){
+                                inventario=""
+                            }else if(varia=="3"){
+                                precio=""
+                            }else if(varia=="4"){
+                                ve=""
+                            }
+                        }
+
+
+
+
+                        db.ProductoDao().insert(
+                            Producto(
+                                0,
+                                sku,
+                                producto.cod_categoria,
+                                cod_negocio,
+                                producto.descripcion,
+                                compra,
+                                inventario,
+                                precio,
+                                ve,
+                                "1",
+                                ca_descripcion,
+                                "0",
+                                "",
+                                "",
+                                "",
+                                "1",
+                                "0"
+                            )
+                        )
                     }
 
-
-
-
-                    db.ProductoDao().insert(
-                        Producto(
-                            0,
-                            skuBuscado,
-                            producto.cod_categoria,
-                            cod_negocio,
-                            producto.descripcion,
-                            compra,
-                            inventario,
-                            precio,
-                            ve,
-                            "1",
-                            ca_descripcion,
-                            "0",
-                            "",
-                            "",
-                            "",
-                            "1",
-                            "0"
-                        )
-                    )
                     finish()
-                   /* productoActivity.putExtra("cod_negocio", cod_negocio)
-                    productoActivity.putExtra("cod_categoria", cod_categoria)
-                    productoActivity.putExtra("cod_zona", cod_zona)
-                    productoActivity.putExtra("cod_canal", cod_canal)
-                    productoActivity.putExtra("ca_descripcion", ca_descripcion)
-                    startActivity(productoActivity)*/
+
                 }
 
             }
@@ -159,6 +161,7 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
 
 
         producto_agregar_btnBuscarNombre.setOnClickListener {
+            arr_skus = mutableListOf<String>()
             lifecycleScope.launch(Dispatchers.IO){
                 var nombreSku = producto_agregar_inputBuscarNombre.text.toString()
                 var productos = db.ProductoMasterDao().get_x_nombre_categoria(nombreSku,cod_categoria)
@@ -185,10 +188,22 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
                         }
                     }
 
-                    adapter.onItemClick = { producto->
+                    adapter.onItemClick = { producto,divcodigo,divdescripcion->
                         skuBuscado = producto.sku
+
+
                         runOnUiThread {
-                            producto_agregar_tSkuGuardar.text = skuBuscado
+                            if(arr_skus.contains(skuBuscado)){
+                                arr_skus.remove(skuBuscado)
+                                producto_agregar_tSkuGuardar.text = skuBuscado
+                                divcodigo.setBackgroundResource(R.color.azul_1)
+                                divdescripcion.setBackgroundResource(R.color.azul_1)
+                            }else{
+                                arr_skus.add(skuBuscado)
+                                producto_agregar_tSkuGuardar.text = skuBuscado
+                                divcodigo.setBackgroundResource(R.color.amarillo_1)
+                                divdescripcion.setBackgroundResource(R.color.amarillo_1)
+                            }
                         }
                     }
 
@@ -199,7 +214,7 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
                     }
                 }else{
                     runOnUiThread {
-                        producto_agregar_tDescripcion_nombre.text = "No se encontró resultadosoreo"
+                        producto_agregar_tDescripcion_nombre.text = "No se encontró resultados"
                     }
 
                 }
@@ -210,15 +225,6 @@ class ProductoAgregarSkuActivity : AppCompatActivity() {
 
         btnAtras.setOnClickListener{
             finish()
-            /*runOnUiThread {
-                productoActivity.putExtra("cod_negocio", cod_negocio)
-                productoActivity.putExtra("direccion", direccion)
-                productoActivity.putExtra("cod_categoria", cod_categoria)
-                productoActivity.putExtra("cod_zona", cod_zona)
-                productoActivity.putExtra("cod_canal", cod_canal)
-                productoActivity.putExtra("ca_descripcion", ca_descripcion)
-                startActivity(productoActivity)
-            }*/
         }
     }
 }

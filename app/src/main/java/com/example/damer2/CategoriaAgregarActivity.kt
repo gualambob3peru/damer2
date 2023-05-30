@@ -41,11 +41,12 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
         spinner = findViewById<Spinner>(R.id.cboCategoria)
         spinner!!.onItemSelectedListener = this
         var miCon = this
+        var misCategorias = arrayListOf<Categoria>()
 
         lifecycleScope.launch(Dispatchers.IO){
             val categorias = db.CategoriaDao().getAll()
             val contratos = db.ContratoDao().getAll()
-            var misCategorias = arrayListOf<Categoria>()
+
             val miNegocio = db.NegocioDao().get_codigo(codigo_negocio.toString())
             val miZona = miNegocio.zona
             val miCanal = miNegocio.canal
@@ -66,10 +67,12 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
                     miArr[ind] = misCategorias[ind].descripcion
                 }
             }
+            runOnUiThread {
+                val aa = ArrayAdapter(miCon, android.R.layout.simple_spinner_item, miArr)
+                aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner!!.adapter = aa
+            }
 
-            val aa = ArrayAdapter(miCon, android.R.layout.simple_spinner_item, miArr)
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner!!.adapter = aa
         }
 
         btnGuardarCategoria.setOnClickListener {
@@ -81,8 +84,8 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
                 val text: String = spinner!!.selectedItem.toString()
                 val miId = spinner!!.selectedItemId.toInt()
 
-                var cod_cad = categorias[miId].codigo
-                var desc_cad = categorias[miId].descripcion
+                var cod_cad = misCategorias[miId].codigo
+                var desc_cad = misCategorias[miId].descripcion
 
                 db.ProductoDao().insert(Producto(0,
                     "",

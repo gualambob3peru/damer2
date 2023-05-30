@@ -119,7 +119,6 @@ class ProductoActivity : AppCompatActivity(){
                     listSkus[ind][7] = misProductos[ind].compra_ant
                 }
 
-
                 for(ind in productos.indices){
                     arr_codigo.add(productos[ind].sku)
                     arr_descripcion.add(productos[ind].descripcion)
@@ -141,6 +140,16 @@ class ProductoActivity : AppCompatActivity(){
                         "",
                         productos[ind].estadoNuevo,
                         productos[ind].compra_ant,
+                        "",
+                        "",
+                        "",
+                        "",
+                        productos[ind].estadoEnviado,
+                        productos[ind].estadoCambiado,
+                        productos[ind].cambioNegocio,
+                        productos[ind].estadoGuardado,
+                        productos[ind].estadoTemporal,
+                        productos[ind].precio_ant
                     )
 
                     arr_producto.add(n_producto)
@@ -194,7 +203,7 @@ class ProductoActivity : AppCompatActivity(){
                             itemMsg.text = msg
                         }
                     }
-
+                    guardadoTemporal()
                 }
                 adapter.onInventarioKey = { position, variable, itemCompra,itemInventario, inv_ant,itemMsg->
                     listSkus[position][variable] = itemInventario.text.toString()
@@ -231,15 +240,16 @@ class ProductoActivity : AppCompatActivity(){
                             itemMsg.text = msg
                         }
                     }
+                    guardadoTemporal()
                 }
                 adapter.onPrecioKey = { position, variable, itemPrecio, precio_ant,itemMsg ->
                     var precio = itemPrecio.text.toString()
                     listSkus[position][variable] = precio
                     if(precio == "") precio = "0"
-                    val min = 10.toFloat()*(100-precioPorcentual.toFloat())/100
-                    var max = 10.toFloat()*(100+precioPorcentual.toFloat())/100
+                    val min = precio_ant.toFloat()*(100-precioPorcentual.toFloat())/100
+                    var max = precio_ant.toFloat()*(100+precioPorcentual.toFloat())/100
 
-                    if(precio!="0"){
+                    if(itemPrecio.text.toString()!=""){
                         if(precio.toFloat() < min || precio.toFloat() > max){
                             runOnUiThread {
                                 itemMsg.text = "Validar"
@@ -251,11 +261,12 @@ class ProductoActivity : AppCompatActivity(){
                         }
                     }
 
-
+                    guardadoTemporal()
 
                 }
                 adapter.onVeKey = { position, variable, itemVe ->
                     listSkus[position][variable] = itemVe.text.toString()
+                    guardadoTemporal()
                 }
 
 
@@ -339,41 +350,100 @@ class ProductoActivity : AppCompatActivity(){
                 var a = 0
                 var i=0
 
-                if(error==1){
-                    runOnUiThread {
-                        Toast.makeText(applicationContext,"Existe una venta negativa!", Toast.LENGTH_SHORT).show()
+
+                var miContrato = db.ContratoDao().get_contrato(cod_categoria,cod_zona,cod_canal)
+                if(miContrato == null) miContrato= Contrato()
+                var variables = miContrato.variables
+                if(variables == ""){
+                    variables = "1,2,3,4"
+                }
+                var arr_variables= variables.split(",")
+                for(value in productosCero){
+                    if(!arr_variables.contains("1")){
+                        listSkus[i][0] = "0"
                     }
-                    return@launch
+                    if(!arr_variables.contains("2")){
+                        listSkus[i][1] = "0"
+                    }
+                    if(!arr_variables.contains("3")){
+                        listSkus[i][2] = "0"
+                    }
+                    i++
                 }
 
+                i=0
+
+
+                var negocioTemporal = 0
                 for(value in productosCero){
-                    if(listSkus[i][0] == ""){
-                        runOnUiThread {
-                            Toast.makeText(applicationContext,"No se puede guardar si existe una compra vacia", Toast.LENGTH_SHORT).show()
-                        }
-                        return@launch
+                    if(listSkus[i][0]=="0" && listSkus[i][1]=="0" && listSkus[i][2]=="0" && listSkus[i][3]=="0"){
+
+                    }else{
+                        negocioTemporal = 1
+                        break
                     }
-                    if(listSkus[i][1] == ""){
-                        runOnUiThread {
-                            Toast.makeText(applicationContext,"No se puede guardar si existe un inventario vacio", Toast.LENGTH_SHORT).show()
-                        }
-                        return@launch
-                    }
-                    if(listSkus[i][2] == "" && (value.compra_ant == "0" || value.compra_ant == "")  && (value.vant == "0" || value.vant == "")){
-                        runOnUiThread {
-                            Toast.makeText(applicationContext,"No se puede guardar si existe un Precio vacio o igual a 0", Toast.LENGTH_SHORT).show()
-                        }
-                        return@launch
-                    }
-                    if(listSkus[i][3] == ""){
-                        runOnUiThread {
-                            Toast.makeText(applicationContext,"No se puede guardar si existe una Ve vacia", Toast.LENGTH_SHORT).show()
-                        }
-                        return@launch
-                    }
+
 
                     i++
                 }
+
+                if(negocioTemporal!=0){
+                    i=0
+                    for(value in productosCero){
+                        var a1   = if(listSkus[i][6]=="") 0.toFloat() else listSkus[i][6].toFloat()
+                        var a2   = if(listSkus[i][0]=="") 0.toFloat() else listSkus[i][0].toFloat()
+                        var a3   = if(listSkus[i][1]=="") 0.toFloat() else listSkus[i][1].toFloat()
+
+                        if(error==1|| (a1 + a2 - a3 < 0)){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"Existe una venta negativa!", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+
+                        if((listSkus[i][0] != "0" || listSkus[i][1] != "0"|| listSkus[i][6] != "0") && listSkus[i][2] == "0"){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"imposible guardar precio = 0 si C I IA>0", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+
+                        if(listSkus[i][0] == ""){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"No se puede guardar si existe una compra vacia", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+                        if(listSkus[i][1] == ""){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"No se puede guardar si existe un inventario vacio", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+                        if(listSkus[i][2] == ""){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"No se puede guardar si existe un Precio vacio o igual a 0", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+                        if(listSkus[i][3] == ""){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"No se puede guardar si existe una Ve vacia", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+
+                        i++
+                    }
+                }
+
+
                 for(skus in listSkus){
                     db.ProductoDao().update_sku(
                         skus[4].toString(),
@@ -406,15 +476,31 @@ class ProductoActivity : AppCompatActivity(){
                 var a = 0
                 var i=0
 
+                var miContrato = db.ContratoDao().get_contrato(cod_categoria,cod_zona,cod_canal)
+                if(miContrato == null) miContrato= Contrato()
+                var variables = miContrato.variables
+                if(variables == ""){
+                    variables = "1,2,3,4"
+                }
+                var arr_variables= variables.split(",")
+
                 i=0
                 for(value in productosCero){
                     if(listSkus[i][0] == ""){
                         listSkus[i][0] = "0"
+                    }else if(!arr_variables.contains("1")){
+                        listSkus[i][0] = "0"
                     }
-                    if(listSkus[i][1] == ""){
+                    if(listSkus[i][1] == "" ){
+                        listSkus[i][1] = "0"
+                    }else if(!arr_variables.contains("2")){
                         listSkus[i][1] = "0"
                     }
+
+
                     if(listSkus[i][2] == "" && (value.compra_ant == "0" || value.compra_ant == "")  && (value.vant == "0" || value.vant == "")){
+                        listSkus[i][2] = "0"
+                    }else if(!arr_variables.contains("3")){
                         listSkus[i][2] = "0"
                     }
                     if(listSkus[i][3] == ""){

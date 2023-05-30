@@ -18,8 +18,11 @@ interface NegocioDao {
     @Query("SELECT * from Negocio WHERE id = :id")
      fun get(id: Int): Negocio
 
-    @Query("SELECT * from Negocio WHERE distrito = :cod_distrito order by upper(descripcion) asc")
+    @Query("SELECT * from Negocio WHERE distrito = :cod_distrito and estado=1 order by upper(descripcion) asc")
     fun get_distrito(cod_distrito: String): List<Negocio>
+
+    @Query("SELECT * from Negocio WHERE distrito = :cod_distrito and estado=0 order by upper(descripcion) asc")
+    fun get_archivados(cod_distrito: String): List<Negocio>
 
     @Query("SELECT * from Negocio WHERE estadoVi = 2")
      fun get_ocultos(): List<Negocio>
@@ -43,7 +46,7 @@ interface NegocioDao {
     @Query("UPDATE  Negocio set estadoVi=1 WHERE codigo_negocio= :cod_negocio")
      fun update_recuperar(cod_negocio:String)
 
-    @Query("UPDATE  Negocio set estadoVi=2 WHERE codigo_negocio= :cod_negocio")
+    @Query("UPDATE  Negocio set estado=0 WHERE codigo_negocio= :cod_negocio")
      fun update_archivar(cod_negocio:String)
 
     @Query("UPDATE  Negocio set estadoEnviado=:estadoEnviado WHERE codigo_negocio= :cod_negocio")

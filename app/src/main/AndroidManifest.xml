@@ -22,6 +22,9 @@
         android:theme="@style/Theme.Damer2"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".NegocioArchivadoActivity"
+            android:exported="false" />
+        <activity
             android:name=".CategoriaNegocioEditarActivity"
             android:exported="false" />
         <activity

@@ -2,6 +2,7 @@ package com.example.damer2.adapter
 
 import android.content.Context
 import android.graphics.Color
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,7 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
     var onItemClick: ((Negocio) -> Unit)? = null
     var onItemButtonClick: ((Negocio, Button) -> Unit)? = null
     var onItemBtnTemporalClick: ((Negocio, Button) -> Unit)? = null
+    var onItemBtnArchivarClick: ((Negocio) -> Unit)? = null
 
     var negocios : List<Negocio> = emptyList()
     var num_vacios : MutableList<Int> = mutableListOf()
@@ -62,8 +64,6 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             viewHolder.itemCodigo.text  = this.negocios[i].codigo_negocio
         }
 
-
-
         viewHolder.itemCanal.text = this.arr_canals[i]
 
         val n_v = num_vacios[i]
@@ -75,7 +75,9 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
         if(e_e==1){//verde
             estadoenvio=1
             viewHolder.itemButton.setBackgroundColor(Color.parseColor( "#06D6A0") )
+            viewHolder.itemBtnArchivar.visibility = View.VISIBLE
         }else{
+            viewHolder.itemBtnArchivar.visibility = View.INVISIBLE
             if(n_v>0 || n_p==0){//Rojo
                 estadoenvio=2
                 viewHolder.itemButton.setBackgroundColor(Color.parseColor("#ff6542") )
@@ -93,7 +95,6 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             viewHolder.itemDescripcion.setTextColor(Color.parseColor("#FFFFFF"))
         }
 
-
         if(this.negocios[i].estadoTemporal==0){
             viewHolder.itemBtnTemporal.visibility = View.VISIBLE
         }else if(this.negocios[i].estadoTemporal==2){
@@ -101,6 +102,9 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             viewHolder.itemBtnTemporal.text = "BAJA"
             viewHolder.itemBtnTemporal.setBackgroundColor(Color.parseColor("#ff6542") ) //ROJO
         }
+
+
+
 
     }
 
@@ -115,6 +119,7 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
         var itemTextoExcluido: TextView
         var itemBtnTemporal: Button
         var itemCanal: TextView
+        var itemBtnArchivar: ImageView
 
         init{
             itemDescripcion = itemView.findViewById(R.id.card_negocio_tDescripcion)
@@ -124,6 +129,7 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             itemTextoExcluido= itemView.findViewById(R.id.negocio_excluido)
             itemBtnTemporal= itemView.findViewById(R.id.btn_baja)
             itemCanal= itemView.findViewById(R.id.card_negocio_tCanal)
+            itemBtnArchivar= itemView.findViewById(R.id.btn_archivar)
 
             itemDescripcion.setOnClickListener{
                 onItemClick?.invoke(negocios[adapterPosition])
@@ -133,6 +139,9 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             }
             itemBtnTemporal.setOnClickListener{
                 onItemBtnTemporalClick?.invoke(negocios[adapterPosition],itemBtnTemporal)
+            }
+            itemBtnArchivar.setOnClickListener{
+                onItemBtnArchivarClick?.invoke(negocios[adapterPosition])
             }
         }
     }

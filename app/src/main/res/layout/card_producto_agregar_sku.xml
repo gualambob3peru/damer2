@@ -15,15 +15,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:background="@color/azul_1"
+        android:id="@+id/card_pas_div"
         >
         <TextView
             android:id="@+id/card_pas_sku"
             android:layout_width="0dp"
             android:layout_height="22dp"
             app:layout_constraintWidth_percent="1"
+            android:padding="5dp"
 
-            android:background="@color/azul_1"
             android:text="SKU"
             android:paddingLeft="30dp"
 
@@ -42,12 +43,12 @@
             android:layout_height="wrap_content"
             app:layout_constraintWidth_percent="1"
             android:layout_marginTop="18dp"
-            android:background="@color/azul_1"
             android:text="NEGOCIO"
             android:paddingLeft="30dp"
             android:paddingRight="16dp"
             android:textColor="@color/white"
             android:textSize="11dp"
+            android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
