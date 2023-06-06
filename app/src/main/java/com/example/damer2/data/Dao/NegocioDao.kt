@@ -21,6 +21,9 @@ interface NegocioDao {
     @Query("SELECT * from Negocio WHERE distrito = :cod_distrito and estado=1 order by upper(descripcion) asc")
     fun get_distrito(cod_distrito: String): List<Negocio>
 
+
+
+
     @Query("SELECT * from Negocio WHERE distrito = :cod_distrito and estado=0 order by upper(descripcion) asc")
     fun get_archivados(cod_distrito: String): List<Negocio>
 

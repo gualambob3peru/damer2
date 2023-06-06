@@ -80,10 +80,8 @@ class MainActivity : AppCompatActivity() {
                                     var Produ = db.ProductoMasterDao().getCount()
 
                                     if(Produ!=0) {
-                                        if(prefs.getUsuario()["email"] == txtEmail.text.toString()){
+                                        if(prefs.getUsuario()["email"]?.uppercase() == txtEmail.text.toString().uppercase()){
                                             runOnUiThread {
-
-
 
                                                 botonLogin.isEnabled = true
                                                 val resumenActivity =

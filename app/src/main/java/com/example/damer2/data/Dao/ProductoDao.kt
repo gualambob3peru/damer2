@@ -27,6 +27,9 @@ interface ProductoDao {
     @Query("SELECT * from Producto WHERE sku = :sku")
     fun get_by_codigo(sku: String): Producto
 
+    @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio  and cod_categoria=:cod_categoria  and estado=1 order by upper(descripcion) asc")
+    fun getNegocio_x_categoria(cod_negocio:String, cod_categoria:String): Int
+
     @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND cod_categoria=:cod_categoria AND sku = :sku")
     fun get_x_categoria_sku(cod_negocio:String,cod_categoria: String,sku: String): Int
 

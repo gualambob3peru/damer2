@@ -22,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.damer2.data.Database.AuditoriaDb
 import com.example.damer2.data.Entities.Contrato
 import com.example.damer2.data.Entities.Producto
+import com.example.damer2.data.Entities.ProductoMaster
 import com.example.damer2.databinding.ActivityProductoAgregarBinding
 import com.example.damer2.shared.UsuarioApplication
 import kotlinx.coroutines.Dispatchers
@@ -184,6 +185,19 @@ class ProductoAgregarActivity : AppCompatActivity() {
                         marca,
                         peso
                     ))
+
+                    db.ProductoMasterDao().insert(
+                        ProductoMaster(
+                           0,
+                            codigo_nuevo,
+                            descripcion_producto,
+                            "1",
+                            cod_categoria,
+                            miNegocio.distrito,
+                            cod_canal,
+                            cod_zona
+                        )
+                    )
 
                     var i = 0
 

@@ -12,6 +12,7 @@ interface CategoriaDao {
     @Query("SELECT * from Categoria order by descripcion asc")
      fun getAll(): List<Categoria>
 
+
     @Query("SELECT * from Categoria WHERE id = :id")
      fun get(id: Int): Categoria
 

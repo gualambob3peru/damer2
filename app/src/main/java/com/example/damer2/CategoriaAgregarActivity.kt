@@ -59,12 +59,20 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
                 }
             }
 
-            val miArr = arrayOfNulls<String>(misCategorias.size)
-            var miPos = arrayOfNulls<Int>(misCategorias.size)
+            var arr_categorias = arrayListOf<Categoria>()
 
-            if(misCategorias !=null){
+            for (categoria in misCategorias){
+                if(db.ProductoDao().getNegocio_x_categoria(codigo_negocio.toString(),categoria.codigo)==0){
+                    arr_categorias.add(categoria)
+                }
+            }
+
+            val miArr = arrayOfNulls<String>(arr_categorias.size)
+            var miPos = arrayOfNulls<Int>(arr_categorias.size)
+
+            if(arr_categorias !=null){
                 for(ind in miArr.indices){
-                    miArr[ind] = misCategorias[ind].descripcion
+                    miArr[ind] = arr_categorias[ind].descripcion
                 }
             }
             runOnUiThread {
@@ -79,6 +87,7 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
             lifecycleScope.launch(Dispatchers.IO){
 
                 var categorias = db.CategoriaDao().getAll()
+
 
 
                 val text: String = spinner!!.selectedItem.toString()
