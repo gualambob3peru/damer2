@@ -25,6 +25,23 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
+
+    var num = 1
+    override fun onResume() {
+
+        super.onResume()
+
+        if(num!=1){
+            finish()
+
+            val mainActivity = Intent(this, MainActivity::class.java)
+
+            startActivity(mainActivity)
+        }else{
+            num++
+        }
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -37,16 +54,23 @@ class MainActivity : AppCompatActivity() {
         val txtPassword = findViewById<TextView>(R.id.txtPassword)
         val tmensaje = findViewById<TextView>(R.id.tmensaje)
         val resumenActivity = Intent(baseContext, ResumenActivity::class.java)
+        val linkServidorActivity = Intent(baseContext, LinkServidorActivity::class.java)
+        val btnLinkServidor = findViewById<ImageView>(R.id.btnLinkServidor)
 
 
         lifecycleScope.launch(Dispatchers.IO){
             var miGlobal = db.GlobalDao().get_codigo("ruta_api")
             if(miGlobal==null){
                 prefs.setRutaApi(RUTA_API)
+            }else{
+                prefs.setRutaApi(miGlobal.valor)
+                RUTA_API = miGlobal.valor
             }
         }
 
-
+        btnLinkServidor.setOnClickListener {
+            startActivity(linkServidorActivity)
+        }
 
         botonLogin.setOnClickListener {
 
@@ -352,5 +376,13 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+    }
+
+    fun actualizar (){
+
+        val mainActivity  = Intent(baseContext, MainActivity::class.java)
+
+        finish()
+        startActivity(mainActivity)
     }
 }

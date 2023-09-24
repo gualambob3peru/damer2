@@ -17,6 +17,9 @@ interface GlobalDao {
     @Query("SELECT * from Global WHERE codigo = :codigo")
     fun get_codigo(codigo: String): Global
 
+    @Query("UPDATE Global SET valor=:valor WHERE codigo = :codigo")
+    fun update_codigo(codigo: String, valor:String)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
      fun insert(global: Global)
 

@@ -1,5 +1,9 @@
 package com.example.damer2
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,16 +13,30 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.damer2.data.Database.AuditoriaDb
 import com.example.damer2.data.Entities.Negocio
 import com.example.damer2.shared.UsuarioApplication
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CategoriaNegocioEditarActivity : AppCompatActivity()  , AdapterView.OnItemSelectedListener{
 
     var spinnerCanal: Spinner? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +49,8 @@ class CategoriaNegocioEditarActivity : AppCompatActivity()  , AdapterView.OnItem
         val txtTelefono = findViewById<TextView>(R.id.txtTelefono)
         val btnAtras = findViewById<ImageView>(R.id.btnAtras)
         val negocio_editar_btnGuardar = findViewById<ImageView>(R.id.negocio_editar_btnGuardar)
+        val negocio_editar_btnLeocalizacion = findViewById<ImageView>(R.id.negocio_editar_btnLeocalizacion)
+        val negocioLocalizacionActivity = Intent(baseContext, NegocioLocalizacionActivity::class.java)
 
         var medicion = UsuarioApplication.prefs.getUsuario()["medicion"].toString()
         val textView2 = findViewById<TextView>(R.id.txtMedicion)
@@ -106,6 +126,16 @@ class CategoriaNegocioEditarActivity : AppCompatActivity()  , AdapterView.OnItem
         btnAtras.setOnClickListener {
             finish()
         }
+
+
+        negocio_editar_btnLeocalizacion.setOnClickListener {
+            runOnUiThread {
+
+                negocioLocalizacionActivity.putExtra("cod_negocio", cod_negocio)
+                startActivity(negocioLocalizacionActivity)
+            }
+
+        }
     }
 
     override fun onItemSelected(arg0: AdapterView<*>, arg1: View, position: Int, id: Long) {
@@ -115,4 +145,8 @@ class CategoriaNegocioEditarActivity : AppCompatActivity()  , AdapterView.OnItem
     override fun onNothingSelected(arg0: AdapterView<*>) {
 
     }
+
+
+
+
 }

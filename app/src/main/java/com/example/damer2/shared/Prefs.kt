@@ -23,6 +23,10 @@ class Prefs(val context:Context) {
         storage.edit().putString("ruta_api",ruta).apply()
     }
 
+    fun setCod_Negocio(cod_negocio:String){
+        storage.edit().putString("cod_negocio_ele",cod_negocio).apply()
+    }
+
     fun setUsuario (usuario : MutableMap<String,String>){
         storage.edit().putString("id",usuario["id"]).apply()
         storage.edit().putString("nombres",usuario["nombres"]).apply()
@@ -64,6 +68,9 @@ class Prefs(val context:Context) {
 
     fun getRutaApi(): String {
         return storage.getString("ruta_api","")!!
+    }
+    fun getCod_Negocio(): String {
+        return storage.getString("cod_negocio_ele","")!!
     }
 }
 

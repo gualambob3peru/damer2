@@ -66,13 +66,13 @@ class CategoriaAgregarActivity  : AppCompatActivity(), AdapterView.OnItemSelecte
                     arr_categorias.add(categoria)
                 }
             }
+            misCategorias = arr_categorias
+            val miArr = arrayOfNulls<String>(misCategorias.size)
+            var miPos = arrayOfNulls<Int>(misCategorias.size)
 
-            val miArr = arrayOfNulls<String>(arr_categorias.size)
-            var miPos = arrayOfNulls<Int>(arr_categorias.size)
-
-            if(arr_categorias !=null){
+            if(misCategorias !=null){
                 for(ind in miArr.indices){
-                    miArr[ind] = arr_categorias[ind].descripcion
+                    miArr[ind] = misCategorias[ind].descripcion
                 }
             }
             runOnUiThread {

@@ -65,8 +65,6 @@ class NegocioActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_negocio)
 
-
-
         var medicion = UsuarioApplication.prefs.getUsuario()["medicion"].toString()
         var cod_distrito = intent.getStringExtra("cod_distrito").toString()
         var cod_zona = intent.getStringExtra("cod_zona").toString()
@@ -230,6 +228,8 @@ class NegocioActivity : AppCompatActivity() {
 
                         if(estadoNegocio!=1 && negocio.estadoTemporal!=2){//Si no esta enviado se puede ingresar a categorias
                             runOnUiThread {
+                                prefs.setCod_Negocio(negocio.codigo_negocio)
+
                                 categoriaActivity.putExtra("cod_distrito", cod_distrito)
                                 categoriaActivity.putExtra("di_descripcion", di_descripcion)
                                 categoriaActivity.putExtra("cod_negocio", negocio.codigo_negocio)
@@ -345,6 +345,20 @@ class NegocioActivity : AppCompatActivity() {
                     recyclerView.layoutManager = linearLayoutManager
                     recyclerView.adapter = adapter
 
+                    val cod_negocio_ele = prefs.getCod_Negocio()
+
+                    if(cod_negocio_ele!=""){
+                        for(i in negocios.indices){
+                            if(negocios[i].codigo_negocio.uppercase().contains(cod_negocio_ele)){
+
+
+                                recyclerView.scrollToPosition(i)
+
+
+                                break
+                            }
+                        }
+                    }
 
                 }
                 //mAlertDialog.cancel()
@@ -459,6 +473,9 @@ class NegocioActivity : AppCompatActivity() {
         datosSubida["cod_zona"] = miNegocio.zona
         datosSubida["cod_canal"] = miNegocio.canal
         datosSubida["cod_distrito"] = miNegocio.distrito
+        datosSubida["lat"] = miNegocio.lat
+        datosSubida["lgn"] = miNegocio.lgn
+
         val db = AuditoriaDb(this)
         val producto_tMensaje = findViewById<TextView>(R.id.producto_tMensaje)
 

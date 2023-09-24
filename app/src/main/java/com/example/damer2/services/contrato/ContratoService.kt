@@ -1,5 +1,6 @@
 package com.example.damer2.services.contrato
 
+import com.example.damer2.global.GlobalVar.Companion.RUTA_API
 import com.example.damer2.shared.UsuarioApplication
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -17,12 +18,12 @@ interface ContratoService {
     companion object {
 
         //var BASE_URL = "http://192.168.3.5/auditoria/public_auditoria/auditoria/api/login/"
-        var BASE_URL = UsuarioApplication.prefs.getRutaApi() + "api/contrato/"
+        var BASE_URL = RUTA_API + "api/contrato/"
         fun create() : ContratoService {
 
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(RUTA_API + "api/contrato/")
                 .build()
             return retrofit.create(ContratoService::class.java)
 

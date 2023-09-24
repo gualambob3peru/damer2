@@ -3,7 +3,6 @@ package com.example.damer2
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.damer2.adapter.CategoriaAdapter
 import com.example.damer2.data.Database.AuditoriaDb
 import com.example.damer2.data.Entities.Categoria
-import com.example.damer2.data.Entities.Producto
 import com.example.damer2.shared.UsuarioApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +44,7 @@ class CategoriaActivity : AppCompatActivity() {
         var di_descripcion = intent.getStringExtra("di_descripcion").toString()
 
         var categoria_txtNegocio = findViewById<TextView>(R.id.categoria_txtNegocio)
+        var categoria_txtCanal = findViewById<TextView>(R.id.categoria_txtCanal)
         var categoria_btnEditarNegocio = findViewById<ImageView>(R.id.categoria_btnEditarNegocio)
 
         var btnAtras = findViewById<ImageView>(R.id.btnAtras)
@@ -71,9 +70,11 @@ class CategoriaActivity : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             var categorias = db.ProductoDao().getCategorias_negocio(cod_negocio)
             var miNegocio = db.NegocioDao().get_codigo(cod_negocio)
+            val canal_desc = db.CanalDao().get_codigo(miNegocio.canal).descripcion
 
             runOnUiThread {
-                categoria_txtNegocio.text = miNegocio.descripcion
+                categoria_txtNegocio.text = cod_negocio + " " +miNegocio.descripcion
+                categoria_txtCanal.text = canal_desc
             }
 
             var cod_zona = miNegocio.zona
@@ -107,17 +108,32 @@ class CategoriaActivity : AppCompatActivity() {
                 adapter.setList(arr_codigo, arr_descripcion, arr_categoria,arr_excluir)
 
                 adapter.onItemClick = { categoria ->
-                    runOnUiThread {
-                        productoActivity.putExtra("cod_negocio", cod_negocio)
-                        productoActivity.putExtra("cod_distrito", cod_distrito)
-                        productoActivity.putExtra("di_descripcion", di_descripcion)
-                        productoActivity.putExtra("direccion", direccion)
-                        productoActivity.putExtra("cod_categoria", categoria.codigo)
-                        productoActivity.putExtra("cod_zona", cod_zona)
-                        productoActivity.putExtra("cod_canal", cod_canal)
-                        productoActivity.putExtra("ca_descripcion", categoria.descripcion)
-                        startActivity(productoActivity)
+                    lifecycleScope.launch(Dispatchers.IO) {
+
+                        val numExcluidosSinNegocio = db.ProductoDao().get_negocio_categoria_excluido(cod_negocio,categoria.codigo,2)
+                        val numExcluidosConNegocio = db.ProductoDao().get_negocio_categoria_excluido(cod_negocio,categoria.codigo,3)
+
+                        if(numExcluidosSinNegocio>0){
+
+                        }else if(numExcluidosConNegocio>0){
+
+                        }else{
+                            runOnUiThread {
+                                productoActivity.putExtra("cod_negocio", cod_negocio)
+                                productoActivity.putExtra("cod_distrito", cod_distrito)
+                                productoActivity.putExtra("di_descripcion", di_descripcion)
+                                productoActivity.putExtra("direccion", direccion)
+                                productoActivity.putExtra("cod_categoria", categoria.codigo)
+                                productoActivity.putExtra("cod_zona", cod_zona)
+                                productoActivity.putExtra("cod_canal", cod_canal)
+                                productoActivity.putExtra("ca_descripcion", categoria.descripcion)
+                                startActivity(productoActivity)
+                            }
+                        }
+
+
                     }
+
 
                 }
 
@@ -146,8 +162,8 @@ class CategoriaActivity : AppCompatActivity() {
                                             //no agregando a los negocios que ya tienen esa categoria
                                             val tieneCateg = db.ProductoDao().getProducto_count_menosCategoria(ne.codigo_negocio,categoria.codigo)
 
-                                            if(tieneCateg==0){
-                                                arr_neg.add(ne.descripcion)
+                                            if(tieneCateg==0 && ne.codigo_negocio != miNegocio.codigo_negocio){
+                                                arr_neg.add(ne.codigo_negocio + " - " + ne.descripcion)
                                                 arr_cod_nego.add(ne.codigo_negocio)
                                             }
                                         }
@@ -159,7 +175,10 @@ class CategoriaActivity : AppCompatActivity() {
 
                                         runOnUiThread{
                                             val builder3 = AlertDialog.Builder(this@CategoriaActivity)
+
+
                                             builder3
+
                                                 .setTitle("Negocios")
                                                 .setItems(items,
                                                     DialogInterface.OnClickListener { dialog3, which ->
@@ -183,6 +202,7 @@ class CategoriaActivity : AppCompatActivity() {
                                                                 produsInicial = db.ProductoDao().get_negocio_categoria(cod_negocio,categoria.codigo)
                                                                 for(produ in produsInicial){
                                                                     produ.id=0
+                                                                    produ.cambioNegocio = cod_negocio
                                                                     produ.cod_negocio = arr_cod_nego[which]
                                                                     produ.estadoCambiado = 1
                                                                     db.ProductoDao().insert(produ)
@@ -194,7 +214,10 @@ class CategoriaActivity : AppCompatActivity() {
                                                         }
                                                     })
 
+
+
                                             val alert3 = builder3.create()
+
                                             alert3.show()
                                         }
 

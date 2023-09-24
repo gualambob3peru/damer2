@@ -22,6 +22,8 @@ data class Negocio (
     var estadoEnviado : Int = 0,
     var estadoExcluido : Int = 0,//0-> No tiene categorias exluidas pendientes, 2 -> excluido, 3 ->excluido en otro negocio
     var estadoNuevo : Int = 0,
-    var estadoTemporal : Int = 1
+    var estadoTemporal : Int = 1,
+    var lat : String = "",
+    var lgn : String = ""
 
 )

@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 
 class ProductoActivity : AppCompatActivity(){
     companion object {
-        var listSkus = Array(1) {Array(8) {""} }
+        var listSkus = Array(1) {Array(9) {""} }
         var error = 0
     }
     var num = 1
@@ -78,6 +78,8 @@ class ProductoActivity : AppCompatActivity(){
         var producto_buscador = findViewById<EditText>(R.id.producto_buscador)
         var producto_btnBuscar = findViewById<Button>(R.id.producto_btnBuscar)
         var producto_btnCancelar = findViewById<Button>(R.id.producto_btnCancelar)
+        var producto_txtCategoria = findViewById<TextView>(R.id.producto_txtCategoria)
+
         var precioPorcentual = "0"
 
         val productoAgregarSkuActivity = Intent(this, ProductoAgregarSkuActivity::class.java)
@@ -96,6 +98,11 @@ class ProductoActivity : AppCompatActivity(){
         lifecycleScope.launch(Dispatchers.IO){
             precioPorcentual = db.GeneralDao().get_parametro("precioPorcentual").valor
 
+
+            runOnUiThread {
+                producto_txtCategoria.text = ca_descripcion
+            }
+
             var productos : List<Producto>
 
             productos = db.ProductoDao().getAllProductos_categoria(cod_negocio,cod_categoria)
@@ -105,7 +112,7 @@ class ProductoActivity : AppCompatActivity(){
                 var arr_descripcion : MutableList<String> = mutableListOf()
                 var arr_producto : MutableList<Producto> = mutableListOf()
 
-                listSkus = Array(productos.size) {Array(8) {""} }
+                listSkus = Array(productos.size) {Array(9) {""} }
 
                 var misProductos = db.ProductoDao().getAllProductosNego(cod_negocio,cod_categoria)
                 //var misProductos = productos
@@ -117,6 +124,7 @@ class ProductoActivity : AppCompatActivity(){
                     listSkus[ind][5] = misProductos[ind].descripcion
                     listSkus[ind][6] = misProductos[ind].vant
                     listSkus[ind][7] = misProductos[ind].compra_ant
+                    listSkus[ind][8] = misProductos[ind].precio_ant
                 }
 
                 for(ind in productos.indices){
@@ -357,16 +365,23 @@ class ProductoActivity : AppCompatActivity(){
                 if(variables == ""){
                     variables = "1,2,3,4"
                 }
+                var mostrarCompra = true
+                var mostrarInventario = true
+                var mostrarPrecio = true
+
                 var arr_variables= variables.split(",")
                 for(value in productosCero){
                     if(!arr_variables.contains("1")){
                         listSkus[i][0] = "0"
+                        mostrarCompra = false
                     }
                     if(!arr_variables.contains("2")){
                         listSkus[i][1] = "0"
+                        mostrarInventario = false
                     }
                     if(!arr_variables.contains("3")){
                         listSkus[i][2] = "0"
+                        mostrarPrecio = false
                     }
                     i++
                 }
@@ -394,7 +409,24 @@ class ProductoActivity : AppCompatActivity(){
                         var a2   = if(listSkus[i][0]=="") 0.toFloat() else listSkus[i][0].toFloat()
                         var a3   = if(listSkus[i][1]=="") 0.toFloat() else listSkus[i][1].toFloat()
 
-                        if(error==1|| (a1 + a2 - a3 < 0)){
+
+                        var precio = listSkus[i][2]
+                        var precio_ant = listSkus[i][8]
+                        if(precio == "") precio = "0"
+                        val min = precio_ant.toFloat()*(100-precioPorcentual.toFloat())/100
+                        var max = precio_ant.toFloat()*(100+precioPorcentual.toFloat())/100
+
+
+                        if(mostrarPrecio && precio_ant!="0" && (listSkus[i][0] != "0" || listSkus[i][1] != "0" || listSkus[i][2] != "0" || listSkus[i][6] != "0") && (precio.toFloat() < min || precio.toFloat() > max)){
+                            runOnUiThread {
+                                Toast.makeText(applicationContext,"Existen Precios por corregir", Toast.LENGTH_SHORT).show()
+                            }
+                            db.ProductoDao().update_estadoNoGuardado(cod_negocio,cod_categoria)
+                            return@launch
+                        }
+
+
+                        if(mostrarCompra && mostrarInventario && (error==1|| (a1 + a2 - a3 < 0))){
                             runOnUiThread {
                                 Toast.makeText(applicationContext,"Existe una venta negativa!", Toast.LENGTH_SHORT).show()
                             }
@@ -402,7 +434,7 @@ class ProductoActivity : AppCompatActivity(){
                             return@launch
                         }
 
-                        if((listSkus[i][0] != "0" || listSkus[i][1] != "0"|| listSkus[i][6] != "0") && listSkus[i][2] == "0"){
+                        if(mostrarPrecio && (listSkus[i][0] != "0" || listSkus[i][1] != "0"|| listSkus[i][6] != "0") && listSkus[i][2] == "0"){
                             runOnUiThread {
                                 Toast.makeText(applicationContext,"imposible guardar precio = 0 si C I IA>0", Toast.LENGTH_SHORT).show()
                             }

@@ -1,5 +1,6 @@
 package com.example.damer2.services.imagenService
 
+import com.example.damer2.global.GlobalVar.Companion.RUTA_API
 import com.example.damer2.services.medicion.CategoriaService
 import com.example.damer2.shared.UsuarioApplication
 import okhttp3.MultipartBody
@@ -18,13 +19,13 @@ interface ImageApiService {
 
     companion object {
 
-        var BASE_URL = UsuarioApplication.prefs.getRutaApi() + "api/image/"
+        var BASE_URL = RUTA_API + "api/image/"
 
         fun create() : ImageApiService {
 
             val retrofit = Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(RUTA_API + "api/image/")
                 .build()
             return retrofit.create(ImageApiService::class.java)
 

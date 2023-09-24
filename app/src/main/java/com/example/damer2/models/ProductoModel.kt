@@ -12,6 +12,9 @@ class ProductoModel {
     var cod_canal : String =""
     var cod_zona : String = ""
     var compra_ant : String ="0"
+    var compra : String =""
+    var inventario : String =""
+    var precio : String =""
     var estado : String="1"
     var fabricante : String = ""
     var marca : String = ""
@@ -24,4 +27,5 @@ class ProductoModel {
     var estadoGuardado : Int = 0
     var estadoTemporal : Int = 1
     var precio_ant : String = "0"
+    var ve : String = "0"
 }

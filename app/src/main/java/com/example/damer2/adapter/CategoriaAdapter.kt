@@ -1,6 +1,7 @@
 package com.example.damer2.adapter
 
 import android.graphics.Color
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,7 @@ class CategoriaAdapter:RecyclerView.Adapter<CategoriaAdapter.ViewHolder>() {
             viewHolder.itemDescripcion.setTextColor(Color.parseColor("#ec3a27"))
         }else if(this.excluirs[i]==3){ //excluido y enviado a otro negocio
             viewHolder.itemDescripcion.setTextColor(Color.parseColor("#ffd166"))
+            viewHolder.itemExcluir.visibility = View.INVISIBLE
         }
     }
 

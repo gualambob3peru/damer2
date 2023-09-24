@@ -45,7 +45,7 @@ interface ProductoDao {
     @Query("SELECT count(1) from Producto WHERE cod_negocio = :cod_negocio AND sku!='' and sku!='0' AND (inventario = '' OR compra='' OR precio ='' OR vant='')")
     fun getNumCampoVacio_by_negocio(cod_negocio: String): Int
 
-    @Query("SELECT count(1) from Producto WHERE estadoGuardado = 0 AND cod_negocio=:cod_negocio and estado=1 and (estadoCambiado=1 or estadoCambiado=0)")
+    @Query("SELECT count(1) from Producto WHERE estadoGuardado = 0 AND cod_negocio=:cod_negocio and sku!='0' and estado=1 and (estadoCambiado=1 or estadoCambiado=0)")
     fun getGuardados_by_negocio(cod_negocio: String): Int
 
     @Query("SELECT count(1) from Producto WHERE estadoEnviado = 1 and estado=1")

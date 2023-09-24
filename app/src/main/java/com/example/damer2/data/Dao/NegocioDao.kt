@@ -57,6 +57,8 @@ interface NegocioDao {
 
     @Query("UPDATE  Negocio set estadoExcluido=:estadoExcluido WHERE codigo_negocio= :cod_negocio")
     fun update_estadoExcluido(cod_negocio:String,estadoExcluido:Int)
+    @Query("UPDATE  Negocio set lat=:lat,lgn=:lgn WHERE codigo_negocio= :cod_negocio")
+    fun update_location(cod_negocio:String,lat:String,lgn:String)
 
     @Query("UPDATE  Negocio set descripcion=:descripcion,nombre=:nombre,vendedor=:vendedor,telefono=:telefono,canal=:canal WHERE codigo_negocio= :codigo_negocio")
     fun update_varios(descripcion:String,nombre:String,vendedor:String,telefono:String,canal:String,codigo_negocio:String)
