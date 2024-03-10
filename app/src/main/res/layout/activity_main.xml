@@ -18,7 +18,7 @@
         android:inputType="textEmailAddress"
         android:textColor="#FFF"
         android:textColorHint="#FFF"
-        android:text="ddelacruz@acmalatam.com"
+        android:text="yarqque@acmalatam.com"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +30,7 @@
         android:layout_marginTop="29dp"
         android:ems="10"
         android:hint="Contraseña"
-        android:text="94273948"
+        android:text="29867322"
         android:inputType="textPassword"
         android:textColor="#FFF"
         android:textColorHint="#FFF"

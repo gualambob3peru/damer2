@@ -206,20 +206,29 @@ class DistritoDescargaActivity : AppCompatActivity() {
                                                 }
                                                 override fun onFailure( call: Call<ContratoResponse>, t: Throwable
                                                 ) {
-                                                    var ff = 2
+                                                    // Check if the throwable has a message
+                                                    val errorMessage = t.message ?: "Unknown error"
+
+                                                    // Now you can use errorMessage to log or display the error
+                                                    println("Error: $errorMessage")
                                                 }
                                             })
 
 
                                         }else{
                                             //Hubo un error en el servidor
+                                            var ff = 2
                                         }
                                     }else{
                                         //No hay negocios!
                                     }
                                 }
                                 override fun onFailure(call: Call<NegocioResponse>, t: Throwable){
-                                    var ff=2
+                                    // Check if the throwable has a message
+                                    val errorMessage = t.message ?: "Unknown error"
+
+                                    // Now you can use errorMessage to log or display the error
+                                    println("Error: $errorMessage")
                                 }
                             })
                         }

@@ -55,17 +55,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/azul_2"
-        android:paddingBottom="12dp"
+        android:paddingBottom="7dp"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
 
         <TextView
             android:id="@+id/categoria_txtNegocio"
-            android:layout_width="288dp"
+            android:layout_width="280dp"
             android:layout_height="33dp"
-            android:text="Negocio"
+            android:text="Negocio Negoci oNegocio NegocioNegocioNegocio "
             android:textColor="#FFF"
-            android:textSize="16dp"
+            android:textSize="14dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
@@ -73,32 +73,48 @@
             android:layout_width="212dp"
             android:layout_height="wrap_content"
             android:text="Canal"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="49dp"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="0dp"
             android:textColor="#FFF"
-            android:textSize="12dp"
+            android:textSize="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
-            android:id="@+id/categoria_btnEditarNegocio"
-            android:layout_width="47dp"
-            android:layout_height="47dp"
-            android:layout_marginEnd="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/categoria_btnAgregar"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/agregarsku" />
-
-        <ImageView
             android:id="@+id/categoria_btnAgregar"
-            android:layout_width="47dp"
-            android:layout_height="47dp"
+            android:layout_width="100dp"
+            android:layout_height="28dp"
             android:layout_marginEnd="16dp"
+            android:background="#3351A6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/agregar">
 
         </ImageView>
+
+        <ImageView
+            android:id="@+id/categoria_btnEditarNegocio"
+            android:layout_width="47dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="70dp"
+            android:background="#3351A6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoria_btnAgregar"
+            app:srcCompat="@drawable/agregarsku" />
+
+        <ImageView
+            android:id="@+id/categoria_btnGeo"
+            android:layout_width="47dp"
+            android:layout_height="23dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="#3351A6"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoria_btnAgregar"
+            app:srcCompat="@drawable/mapa1" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

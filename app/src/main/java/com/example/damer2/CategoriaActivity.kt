@@ -55,7 +55,8 @@ class CategoriaActivity : AppCompatActivity() {
 
         val negocioActivity = Intent(baseContext, NegocioActivity::class.java)
         val categoriaNegocioEditarActivity = Intent(baseContext, CategoriaNegocioEditarActivity::class.java)
-
+        val image_btn_geo = findViewById<ImageView>(R.id.categoria_btnGeo)
+        val negocioLocalizacionActivity = Intent(baseContext, NegocioLocalizacionActivity::class.java)
 
 
 
@@ -284,6 +285,23 @@ class CategoriaActivity : AppCompatActivity() {
                 categoriaAgregarActivity.putExtra("direccion", direccion)
                 startActivity(categoriaAgregarActivity)
             }
+        }
+
+        image_btn_geo.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO){
+                var miNegocio = db.NegocioDao().get_codigo(cod_negocio)
+
+                runOnUiThread {
+
+                    negocioLocalizacionActivity.putExtra("cod_negocio", cod_negocio)
+                    negocioLocalizacionActivity.putExtra("lat", miNegocio.lat)
+                    negocioLocalizacionActivity.putExtra("lgn", miNegocio.lgn)
+                    startActivity(negocioLocalizacionActivity)
+                }
+            }
+
+
+
         }
 
         btnAtras.setOnClickListener{

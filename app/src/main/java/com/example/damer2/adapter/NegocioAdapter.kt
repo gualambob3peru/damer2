@@ -101,6 +101,8 @@ class NegocioAdapter:RecyclerView.Adapter<NegocioAdapter.ViewHolder>() {
             viewHolder.itemBtnTemporal.visibility = View.VISIBLE
             viewHolder.itemBtnTemporal.text = "BAJA"
             viewHolder.itemBtnTemporal.setBackgroundColor(Color.parseColor("#ff6542") ) //ROJO
+        }else if(this.negocios[i].estadoTemporal==1){
+            viewHolder.itemBtnTemporal.visibility = View.INVISIBLE
         }
 
 
